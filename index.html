@@ -343,29 +343,45 @@
             background: rgba(255,255,255,0.7); z-index: 10002; justify-content: center; align-items: center;
         }
 
-        /* Modal Styles for Join/Login */
+        /* MODAL STYLES UPDATED FOR FULL PAGE APPEARANCE */
         .auth-modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 10005; justify-content: center; align-items: flex-end;
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: #fff; /* Changed to white for full page effect */
+            z-index: 10005; 
+            flex-direction: column;
+            overflow-y: auto;
         }
         .auth-sheet {
-            width: 100%; max-width: 500px; background: white; border-radius: 20px 20px 0 0;
-            padding: 20px; box-sizing: border-box; position: relative;
-            text-align: left; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            width: 100%; 
+            max-width: 480px; 
+            margin: 0 auto;
+            background: white; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            position: relative;
+            text-align: left; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             direction: ltr !important;
-            max-height: 95vh; overflow-y: auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        .auth-title { font-size: 34px; font-weight: 900; margin: 30px 0 35px; color: #000; text-align: center; letter-spacing: -0.5px; }
-        .auth-input-group { margin-bottom: 5px; position: relative; }
+        .auth-title { font-size: 34px; font-weight: 900; margin: 50px 0 40px; color: #000; text-align: center; letter-spacing: -0.5px; }
+        .auth-input-group { margin-bottom: 8px; position: relative; }
         .auth-input {
             width: 100%; padding: 16px 0; border: none; border-bottom: 1.5px solid #e5e7eb;
-            margin-bottom: 10px; font-size: 18px; outline: none; color: #000;
+            font-size: 18px; outline: none; color: #000;
             font-weight: 400;
         }
         .auth-input::placeholder { color: #9ca3af; }
         .auth-submit-btn {
             width: 100%; padding: 18px; background: #81e6f9; border: none; border-radius: 12px;
-            color: #fff; font-size: 20px; font-weight: 800; margin: 25px 0 15px; cursor: pointer;
+            color: #fff; font-size: 20px; font-weight: 800; margin: 30px 0 15px; cursor: pointer;
             transition: opacity 0.2s;
         }
         .social-btn {
@@ -375,14 +391,14 @@
             color: #000;
         }
         .social-btn img { width: 22px; height: 22px; }
-        .auth-footer { margin: 30px 0 20px; color: #6b7280; font-size: 16px; text-align: center; font-weight: 500; }
+        .auth-footer { margin: 40px 0 20px; color: #6b7280; font-size: 16px; text-align: center; font-weight: 500; }
         .auth-footer span { font-weight: 800; color: #000; cursor: pointer; }
         
         .auth-legal-small { font-size: 13px; color: #000; line-height: 1.5; margin: 20px 0; font-weight: 500; }
         .auth-legal-small span { text-decoration: underline; font-weight: 600; cursor: pointer; }
         
         .toggle-password { position: absolute; right: 0; top: 16px; cursor: pointer; color: #374151; }
-        .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 20px 0; cursor: pointer; }
+        .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 25px 0; cursor: pointer; }
         .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
     </style>
     <script src="https://player.vimeo.com/api/player.js"></script>
@@ -504,9 +520,9 @@
         <div class="content-sections-wrapper"></div>
     </div>
 
-    <div id="auth-modal" class="auth-modal" onclick="closeAuthModal()">
-        <div class="auth-sheet" onclick="event.stopPropagation()">
-            <div class="close-sheet" style="top: 20px; right: 20px;" onclick="closeAuthModal()">
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-sheet">
+            <div class="close-sheet" style="top: 25px; right: 25px;" onclick="closeAuthModal()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
             </div>
             <div id="auth-content"></div>
@@ -568,7 +584,7 @@
                     </div>
                     <div class="custom-checkbox-wrapper">
                         <div class="custom-checkbox"></div>
-                        <div style="font-size:14px; color:#000; line-height:1.4;">I agree to receive newsletters, product updates, and exclusive offers from Vimeo.</div>
+                        <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">I agree to receive newsletters, product updates, and exclusive offers from Vimeo.</div>
                     </div>
                     <p class="auth-legal-small">By joining Vimeo, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
                     <button class="auth-submit-btn">Join</button>
@@ -595,10 +611,12 @@
                 `;
             }
             document.getElementById('auth-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Disable scroll on background
         }
 
         function closeAuthModal() {
             document.getElementById('auth-modal').style.display = 'none';
+            document.body.style.overflow = ''; // Re-enable scroll
         }
 
         function handleBtnClick(btn) {
@@ -740,8 +758,6 @@
                 box.className = i === tempRegIdx ? 'option-box selected' : 'option-box';
                 box.onclick = () => setTempReg(i);
                 let icon = reg.type === 'icon' ? reg.svg : `<img src="${reg.flag}">`;
-                
-                // Content for region box - flipped for LTR/RTL correctly
                 box.innerHTML = `<span>${reg[tempLang]}</span>` + icon;
                 container.appendChild(box);
             });
