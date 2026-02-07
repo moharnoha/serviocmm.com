@@ -396,7 +396,18 @@
             width: 100%; padding: 18px; background: var(--primary-green); border: none; border-radius: 12px;
             color: #fff; font-size: 20px; font-weight: 800; margin: 30px 0 15px; cursor: pointer;
             transition: opacity 0.2s;
+            display: flex; align-items: center; justify-content: center; position: relative;
         }
+        
+        .auth-submit-btn span { flex: 1; text-align: center; }
+        .auth-submit-btn .exact-8-spinner {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%) scale(0.5);
+            margin: 0;
+        }
+
         .social-btn {
             width: 100%; padding: 14px; border: none; border-radius: 12px;
             background: #f3f4f6; display: flex; align-items: center; justify-content: center;
@@ -512,14 +523,14 @@
             </div>
 
             <div class="footer-actions-new">
-                <button class="btn-new btn-primary-new" id="btn-join-label" onclick="openAuthModal('join')">
+                <button class="btn-new btn-primary-new" id="btn-join-label" onclick="handleMainBtnClick(this, 'join')">
                     <span>Join for free</span>
                     <div class="exact-8-spinner">
                         <div></div><div></div><div></div><div></div>
                         <div></div><div></div><div></div><div></div>
                     </div>
                 </button>
-                <button class="btn-new btn-secondary-new" id="btn-login-label" onclick="openAuthModal('login')">
+                <button class="btn-new btn-secondary-new" id="btn-login-label" onclick="handleMainBtnClick(this, 'login')">
                     <span>Log in</span>
                     <div class="exact-8-spinner">
                         <div></div><div></div><div></div><div></div>
@@ -586,6 +597,23 @@
         let tempLang = localStorage.getItem('pref_lang') || 'ar';
         let tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
 
+        function handleMainBtnClick(btn, type) {
+            const spinner = btn.querySelector('.exact-8-spinner');
+            spinner.style.display = 'block';
+            setTimeout(() => {
+                spinner.style.display = 'none';
+                openAuthModal(type);
+            }, 800);
+        }
+
+        function handleAuthSubmit(btn) {
+            const spinner = btn.querySelector('.exact-8-spinner');
+            spinner.style.display = 'block';
+            setTimeout(() => {
+                spinner.style.display = 'none';
+            }, 2000);
+        }
+
         function openAuthModal(type) {
             const container = document.getElementById('auth-content');
             const lang = localStorage.getItem('pref_lang') || 'ar';
@@ -641,7 +669,10 @@
                         <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">${cur.news}</div>
                     </div>
                     <p class="auth-legal-small">${cur.legalJoin}</p>
-                    <button class="auth-submit-btn">${cur.joinBtn}</button>
+                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this)">
+                        <span>${cur.joinBtn}</span>
+                        <div class="exact-8-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </button>
                     <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> ${cur.google}</div>
                     <div class="auth-footer">${cur.haveAccount} <span onclick="openAuthModal('login')">${cur.loginBtn}</span></div>
                 `;
@@ -655,7 +686,10 @@
                     </div>
                     <div style="text-align:inherit; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">${cur.forgot}</div>
                     <p class="auth-legal-small">${cur.legalLogin}</p>
-                    <button class="auth-submit-btn">${cur.loginBtn}</button>
+                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this)">
+                        <span>${cur.loginBtn}</span>
+                        <div class="exact-8-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </button>
                     <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> ${cur.google}</div>
                     <div class="auth-footer">${cur.noAccount} <span onclick="openAuthModal('join')">${cur.joinBtn}</span></div>
                 `;
@@ -667,12 +701,6 @@
         function closeAuthModal() {
             document.getElementById('auth-modal').style.display = 'none';
             document.body.style.overflow = ''; 
-        }
-
-        function handleBtnClick(btn) {
-            const spinner = btn.querySelector('.exact-8-spinner');
-            spinner.style.display = 'block';
-            setTimeout(() => { spinner.style.display = 'none'; }, 2000);
         }
 
         function initSlider() {
@@ -853,7 +881,6 @@
             document.querySelector('#btn-login-label span').innerText = translations[lang].login;
             document.getElementById('legal-label').innerHTML = translations[lang].legal;
             
-            // Re-render auth modal if open to apply language switch
             if (document.getElementById('auth-modal').style.display === 'flex') {
                 const isJoin = document.querySelector('.auth-title').innerText.includes('Join') || document.querySelector('.auth-title').innerText.includes('انضم');
                 openAuthModal(isJoin ? 'join' : 'login');
