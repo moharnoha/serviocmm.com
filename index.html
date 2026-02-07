@@ -371,14 +371,27 @@
             display: flex;
             flex-direction: column;
         }
+        
+        /* RTL support for auth modal */
+        [dir="rtl"] .auth-sheet {
+            text-align: right;
+            direction: rtl !important;
+        }
+
         .auth-title { font-size: 34px; font-weight: 900; margin: 50px 0 40px; color: #000; text-align: center; letter-spacing: -0.5px; }
         .auth-input-group { margin-bottom: 8px; position: relative; }
         .auth-input {
             width: 100%; padding: 16px 0; border: none; border-bottom: 1.5px solid #e5e7eb;
             font-size: 18px; outline: none; color: #000;
             font-weight: 400;
+            box-sizing: border-box;
         }
         .auth-input::placeholder { color: #9ca3af; }
+        
+        [dir="rtl"] .auth-input {
+            text-align: right;
+        }
+
         .auth-submit-btn {
             width: 100%; padding: 18px; background: var(--primary-green); border: none; border-radius: 12px;
             color: #fff; font-size: 20px; font-weight: 800; margin: 30px 0 15px; cursor: pointer;
@@ -398,6 +411,8 @@
         .auth-legal-small span { text-decoration: underline; font-weight: 600; cursor: pointer; }
         
         .toggle-password { position: absolute; right: 0; top: 16px; cursor: pointer; color: #374151; }
+        [dir="rtl"] .toggle-password { right: auto; left: 0; }
+        
         .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 25px 0; cursor: pointer; }
         .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
     </style>
@@ -572,25 +587,25 @@
         let tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
 
         function openAuthModal(type) {
-            const lang = localStorage.getItem('pref_lang') || 'ar';
             const container = document.getElementById('auth-content');
+            const lang = localStorage.getItem('pref_lang') || 'ar';
             
-            const trans = {
+            const t = {
                 ar: {
                     joinTitle: "انضم إلى serviocmm",
                     loginTitle: "تسجيل الدخول",
                     namePlace: "الاسم",
                     emailPlace: "البريد الإلكتروني",
                     passPlace: "كلمة المرور",
-                    newsMsg: "أوافق على تلقي النشرات الإخبارية وتحديثات المنتجات والعروض الحصرية من serviocmm.",
-                    legalJoin: "بالانضمام إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span>.",
-                    legalLogin: "بتسجيل الدخول إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span>.",
+                    news: "أوافق على تلقي النشرات الإخبارية وتحديثات المنتجات والعروض الحصرية من serviocmm.",
+                    legalJoin: "من خلال الانضمام إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.",
+                    legalLogin: "من خلال تسجيل الدخول إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.",
                     joinBtn: "انضم الآن",
                     loginBtn: "تسجيل الدخول",
-                    googleBtn: "المتابعة باستخدام Google",
-                    haveAcc: "لديك حساب؟",
-                    noAcc: "ليس لديك حساب؟",
-                    forgot: "نسيت كلمة المرور؟"
+                    google: "المتابعة باستخدام Google",
+                    haveAccount: "لديك حساب؟",
+                    noAccount: "ليس لديك حساب؟",
+                    forgot: "هل نسيت كلمة المرور؟"
                 },
                 en: {
                     joinTitle: "Join serviocmm",
@@ -598,51 +613,51 @@
                     namePlace: "Name",
                     emailPlace: "Email",
                     passPlace: "Password",
-                    newsMsg: "I agree to receive newsletters, product updates, and exclusive offers from serviocmm.",
+                    news: "I agree to receive newsletters, product updates, and exclusive offers from serviocmm.",
                     legalJoin: "By joining serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.",
                     legalLogin: "By logging into serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.",
                     joinBtn: "Join",
                     loginBtn: "Log in",
-                    googleBtn: "Continue with Google",
-                    haveAcc: "Have an account?",
-                    noAcc: "Don't have an account?",
+                    google: "Continue with Google",
+                    haveAccount: "Have an account?",
+                    noAccount: "Don't have an account?",
                     forgot: "Forgot password?"
                 }
             };
 
-            const t = trans[lang];
+            const cur = t[lang];
 
             if (type === 'join') {
                 container.innerHTML = `
-                    <div class="auth-title">${t.joinTitle}</div>
-                    <div class="auth-input-group"><input type="text" class="auth-input" placeholder="${t.namePlace}"></div>
-                    <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${t.emailPlace}"></div>
+                    <div class="auth-title">${cur.joinTitle}</div>
+                    <div class="auth-input-group"><input type="text" class="auth-input" placeholder="${cur.namePlace}"></div>
+                    <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${cur.emailPlace}"></div>
                     <div class="auth-input-group">
-                        <input type="password" class="auth-input" placeholder="${t.passPlace}">
+                        <input type="password" class="auth-input" placeholder="${cur.passPlace}">
                         <div class="toggle-password"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
                     <div class="custom-checkbox-wrapper">
                         <div class="custom-checkbox"></div>
-                        <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">${t.newsMsg}</div>
+                        <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">${cur.news}</div>
                     </div>
-                    <p class="auth-legal-small">${t.legalJoin}</p>
-                    <button class="auth-submit-btn">${t.joinBtn}</button>
-                    <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> ${t.googleBtn}</div>
-                    <div class="auth-footer">${t.haveAcc} <span onclick="openAuthModal('login')">${t.loginBtn}</span></div>
+                    <p class="auth-legal-small">${cur.legalJoin}</p>
+                    <button class="auth-submit-btn">${cur.joinBtn}</button>
+                    <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> ${cur.google}</div>
+                    <div class="auth-footer">${cur.haveAccount} <span onclick="openAuthModal('login')">${cur.loginBtn}</span></div>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="auth-title">${t.loginTitle}</div>
-                    <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${t.emailPlace}"></div>
+                    <div class="auth-title">${cur.loginTitle}</div>
+                    <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${cur.emailPlace}"></div>
                     <div class="auth-input-group">
-                        <input type="password" class="auth-input" placeholder="${t.passPlace}">
+                        <input type="password" class="auth-input" placeholder="${cur.passPlace}">
                         <div class="toggle-password"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
-                    <div style="text-align:right; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">${t.forgot}</div>
-                    <p class="auth-legal-small">${t.legalLogin}</p>
-                    <button class="auth-submit-btn">${t.loginBtn}</button>
-                    <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> ${t.googleBtn}</div>
-                    <div class="auth-footer">${t.noAcc} <span onclick="openAuthModal('join')">${t.joinBtn}</span></div>
+                    <div style="text-align:inherit; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">${cur.forgot}</div>
+                    <p class="auth-legal-small">${cur.legalLogin}</p>
+                    <button class="auth-submit-btn">${cur.loginBtn}</button>
+                    <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> ${cur.google}</div>
+                    <div class="auth-footer">${cur.noAccount} <span onclick="openAuthModal('join')">${cur.joinBtn}</span></div>
                 `;
             }
             document.getElementById('auth-modal').style.display = 'flex';
@@ -837,6 +852,12 @@
             document.querySelector('#btn-join-label span').innerText = translations[lang].join;
             document.querySelector('#btn-login-label span').innerText = translations[lang].login;
             document.getElementById('legal-label').innerHTML = translations[lang].legal;
+            
+            // Re-render auth modal if open to apply language switch
+            if (document.getElementById('auth-modal').style.display === 'flex') {
+                const isJoin = document.querySelector('.auth-title').innerText.includes('Join') || document.querySelector('.auth-title').innerText.includes('انضم');
+                openAuthModal(isJoin ? 'join' : 'login');
+            }
         }
 
         function closeDialog() { document.getElementById('dialog-overlay').style.display = 'none'; }
