@@ -311,12 +311,12 @@
             box-sizing: border-box; color: #4b5563;
         }
 
-        .option-box.selected { border: 2.5px solid #d32f2f; color: #d32f2f; }
+        .option-box.selected { border: 2.5px solid #386E2C; color: #386E2C; }
         .option-box img, .option-box .nav-icon { width: 28px; height: 20px; object-fit: cover; border-radius: 2px; }
         .option-box .nav-icon { width: 22px; height: 22px; color: inherit; }
 
         .save-btn {
-            width: 100%; background: #d32f2f; color: white;
+            width: 100%; background: #386E2C; color: white;
             padding: 16px; border-radius: 8px; border: none;
             font-size: 22px; font-weight: 800; cursor: pointer;
             margin-top: 10px; margin-bottom: 15px;
@@ -380,7 +380,7 @@
         }
         .auth-input::placeholder { color: #9ca3af; }
         .auth-submit-btn {
-            width: 100%; padding: 18px; background: #81e6f9; border: none; border-radius: 12px;
+            width: 100%; padding: 18px; background: var(--primary-green); border: none; border-radius: 12px;
             color: #fff; font-size: 20px; font-weight: 800; margin: 30px 0 15px; cursor: pointer;
             transition: opacity 0.2s;
         }
@@ -401,7 +401,7 @@
         .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 25px 0; cursor: pointer; }
         .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
     </style>
-    <script src="https://player.serviocmm.com/api/player.js"></script>
+    <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
 <body class="notranslate">
 
@@ -474,10 +474,10 @@
                     </div>
                     <div class="video-overlay-new"></div>
                     <div class="video-slide-new active" data-index="0">
-                        <iframe id="serviocmm-new-0" src="https://player.serviocmm.com/video/1162647928?background=1&autoplay=1&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
+                        <iframe id="vimeo-new-0" src="https://player.vimeo.com/video/1162647928?background=1&autoplay=1&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
                     </div>
                     <div class="video-slide-new" data-index="1">
-                        <iframe id="serviocmm-new-1" src="https://player.serviocmm.com/video/1162676708?background=1&autoplay=0&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
+                        <iframe id="vimeo-new-1" src="https://player.vimeo.com/video/1162676708?background=1&autoplay=0&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
                     </div>
                     <div class="video-slide-new" data-index="2">
                         <img src="https://i.postimg.cc/7LjvRyMB/tsmym-bdwn-ʿnwan.png" alt="Slide 3" loading="lazy" decoding="async">
@@ -611,12 +611,12 @@
                 `;
             }
             document.getElementById('auth-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Disable scroll on background
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeAuthModal() {
             document.getElementById('auth-modal').style.display = 'none';
-            document.body.style.overflow = ''; // Re-enable scroll
+            document.body.style.overflow = ''; 
         }
 
         function handleBtnClick(btn) {
@@ -626,7 +626,7 @@
         }
 
         function initSlider() {
-            document.querySelectorAll('iframe[id^="serviocmm-new-"]').forEach((iframe, idx) => {
+            document.querySelectorAll('iframe[id^="vimeo-new-"]').forEach((iframe, idx) => {
                 const player = new Vimeo.Player(iframe);
                 playersNew[idx] = player;
 
@@ -726,7 +726,7 @@
             { id: 'egypt', ar: "مصر", en: "Egypt", flag: 'https://flagcdn.com/eg.svg' },
             { id: 'iraq', ar: "العراق", en: "Iraq", flag: 'https://flagcdn.com/iq.svg' },
             { id: 'jordan', ar: "الأردن", en: "Jordan", flag: 'https://flagcdn.com/jo.svg' },
-            { id: 'mena', ar: "الشرق الأوسط وشمال أفريقيا", en: "MENA", type: 'icon', svg: mdiGlobe },
+            { id: 'mena', ar: "الشرق الأوسط", en: "MENA", type: 'icon', svg: mdiGlobe },
             { id: 'morocco', ar: "المغرب", en: "Morocco", flag: 'https://flagcdn.com/ma.svg' },
             { id: 'nigeria', ar: "نيجيريا", en: "Nigeria", flag: 'https://flagcdn.com/ng.svg' },
             { id: 'oman', ar: "عمان", en: "Oman", flag: 'https://flagcdn.com/om.svg' },
