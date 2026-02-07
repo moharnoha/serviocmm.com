@@ -401,7 +401,7 @@
         .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 25px 0; cursor: pointer; }
         .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
     </style>
-    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script src="https://player.serviocmm.com/api/player.js"></script>
 </head>
 <body class="notranslate">
 
@@ -474,10 +474,10 @@
                     </div>
                     <div class="video-overlay-new"></div>
                     <div class="video-slide-new active" data-index="0">
-                        <iframe id="vimeo-new-0" src="https://player.vimeo.com/video/1162647928?background=1&autoplay=1&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
+                        <iframe id="serviocmm-new-0" src="https://player.serviocmm.com/video/1162647928?background=1&autoplay=1&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
                     </div>
                     <div class="video-slide-new" data-index="1">
-                        <iframe id="vimeo-new-1" src="https://player.vimeo.com/video/1162676708?background=1&autoplay=0&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
+                        <iframe id="serviocmm-new-1" src="https://player.serviocmm.com/video/1162676708?background=1&autoplay=0&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
                     </div>
                     <div class="video-slide-new" data-index="2">
                         <img src="https://i.postimg.cc/7LjvRyMB/tsmym-bdwn-ʿnwan.png" alt="Slide 3" loading="lazy" decoding="async">
@@ -575,7 +575,7 @@
             const container = document.getElementById('auth-content');
             if (type === 'join') {
                 container.innerHTML = `
-                    <div class="auth-title">Join Vimeo</div>
+                    <div class="auth-title">Join serviocmm</div>
                     <div class="auth-input-group"><input type="text" class="auth-input" placeholder="Name"></div>
                     <div class="auth-input-group"><input type="email" class="auth-input" placeholder="Email"></div>
                     <div class="auth-input-group">
@@ -584,9 +584,9 @@
                     </div>
                     <div class="custom-checkbox-wrapper">
                         <div class="custom-checkbox"></div>
-                        <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">I agree to receive newsletters, product updates, and exclusive offers from Vimeo.</div>
+                        <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">I agree to receive newsletters, product updates, and exclusive offers from serviocmm.</div>
                     </div>
-                    <p class="auth-legal-small">By joining Vimeo, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
+                    <p class="auth-legal-small">By joining serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
                     <button class="auth-submit-btn">Join</button>
                     <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> Continue with Google</div>
                     <div class="social-btn"><img src="https://i.postimg.cc/mD8V1G3y/apple.png"> Continue with Apple</div>
@@ -602,7 +602,7 @@
                         <div class="toggle-password"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
                     <div style="text-align:right; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">Forgot password?</div>
-                    <p class="auth-legal-small">By logging into Vimeo, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
+                    <p class="auth-legal-small">By logging into serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
                     <button class="auth-submit-btn">Log in</button>
                     <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> Continue with Google</div>
                     <div class="social-btn"><img src="https://i.postimg.cc/mD8V1G3y/apple.png"> Continue with Apple</div>
@@ -626,7 +626,7 @@
         }
 
         function initSlider() {
-            document.querySelectorAll('iframe[id^="vimeo-new-"]').forEach((iframe, idx) => {
+            document.querySelectorAll('iframe[id^="serviocmm-new-"]').forEach((iframe, idx) => {
                 const player = new Vimeo.Player(iframe);
                 playersNew[idx] = player;
 
