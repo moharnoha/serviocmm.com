@@ -305,16 +305,16 @@
             padding: 12px; display: flex; align-items: center; justify-content: flex-end;
             gap: 10px; cursor: pointer; transition: all 0.2s;
             font-size: 14px; font-weight: 600; min-height: 50px;
-            box-sizing: border-box;
+            box-sizing: border-box; color: #333;
         }
 
-        .option-box.selected { border-color: var(--primary-green); color: var(--primary-green); }
+        .option-box.selected { border: 2px solid #E52D27; color: #E52D27; }
         .option-box img, .option-box .nav-icon { width: 22px; height: 16px; object-fit: cover; }
 
         .save-btn {
-            width: 100%; background: var(--primary-green); color: white;
+            width: 100%; background: #E52D27; color: white;
             padding: 15px; border-radius: 12px; border: none;
-            font-size: 18px; font-weight: 800; cursor: pointer;
+            font-size: 20px; font-weight: 800; cursor: pointer;
             margin-top: 10px; margin-bottom: 20px;
         }
 
@@ -338,6 +338,40 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255,255,255,0.7); z-index: 10002; justify-content: center; align-items: center;
         }
+
+        /* Modal Styles for Join/Login */
+        .auth-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 10005; justify-content: center; align-items: flex-end;
+        }
+        .auth-sheet {
+            width: 100%; max-width: 500px; background: white; border-radius: 24px 24px 0 0;
+            padding: 20px; box-sizing: border-box; position: relative;
+            text-align: left; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            direction: ltr !important;
+        }
+        .auth-title { font-size: 32px; font-weight: 800; margin: 20px 0 30px; color: #000; text-align: center; }
+        .auth-input {
+            width: 100%; padding: 15px 0; border: none; border-bottom: 1px solid #eee;
+            margin-bottom: 5px; font-size: 18px; outline: none; color: #000;
+        }
+        .auth-input::placeholder { color: #bbb; font-weight: 400; }
+        .auth-submit-btn {
+            width: 100%; padding: 16px; background: #88D8F0; border: none; border-radius: 12px;
+            color: white; font-size: 18px; font-weight: 700; margin: 25px 0 15px; cursor: pointer;
+        }
+        .social-btn {
+            width: 100%; padding: 14px; border: 1px solid #eee; border-radius: 50px;
+            background: #fdfdfd; display: flex; align-items: center; justify-content: center;
+            gap: 12px; margin-bottom: 12px; font-weight: 700; cursor: pointer; font-size: 16px;
+            color: #000;
+        }
+        .social-btn img { width: 22px; height: 22px; }
+        .auth-footer { margin-top: 25px; color: #888; font-size: 15px; text-align: center; }
+        .auth-footer span { font-weight: 700; color: #000; cursor: pointer; }
+        
+        .auth-legal-small { font-size: 12px; color: #555; line-height: 1.5; margin: 15px 0; }
+        .auth-legal-small span { text-decoration: underline; font-weight: 500; }
     </style>
     <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
@@ -435,14 +469,14 @@
             </div>
 
             <div class="footer-actions-new">
-                <button class="btn-new btn-primary-new" id="btn-join-label" onclick="handleBtnClick(this)">
+                <button class="btn-new btn-primary-new" id="btn-join-label" onclick="openAuthModal('join')">
                     <span>Join for free</span>
                     <div class="exact-8-spinner">
                         <div></div><div></div><div></div><div></div>
                         <div></div><div></div><div></div><div></div>
                     </div>
                 </button>
-                <button class="btn-new btn-secondary-new" id="btn-login-label" onclick="handleBtnClick(this)">
+                <button class="btn-new btn-secondary-new" id="btn-login-label" onclick="openAuthModal('login')">
                     <span>Log in</span>
                     <div class="exact-8-spinner">
                         <div></div><div></div><div></div><div></div>
@@ -456,6 +490,15 @@
         </div>
 
         <div class="content-sections-wrapper"></div>
+    </div>
+
+    <div id="auth-modal" class="auth-modal" onclick="closeAuthModal()">
+        <div class="auth-sheet" onclick="event.stopPropagation()">
+            <div class="close-sheet" style="top: 20px; right: 20px;" onclick="closeAuthModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <div id="auth-content"></div>
+        </div>
     </div>
 
     <div id="overlay" class="selection-overlay" onclick="closeSelection()">
@@ -500,6 +543,52 @@
         let tempLang = localStorage.getItem('pref_lang') || 'ar';
         let tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
 
+        function openAuthModal(type) {
+            const container = document.getElementById('auth-content');
+            if (type === 'join') {
+                container.innerHTML = `
+                    <div class="auth-title">Join Vimeo</div>
+                    <input type="text" class="auth-input" placeholder="Name">
+                    <input type="email" class="auth-input" placeholder="Email">
+                    <div style="position:relative;">
+                        <input type="password" class="auth-input" placeholder="Password">
+                        <svg style="position:absolute; right:10px; top:18px; color:#666;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:12px; margin: 20px 0;">
+                        <input type="checkbox" id="news-check" style="width:20px; height:20px; border:1px solid #ccc; border-radius:4px;">
+                        <label for="news-check" style="font-size:13px; color:#000;">I agree to receive newsletters, product updates, and exclusive offers from Vimeo.</label>
+                    </div>
+                    <p class="auth-legal-small">By joining Vimeo, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
+                    <button class="auth-submit-btn">Join</button>
+                    <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> Continue with Google</div>
+                    <div class="social-btn"><img src="https://i.postimg.cc/mD8V1G3y/apple.png"> Continue with Apple</div>
+                    <div class="social-btn"><img src="https://i.postimg.cc/XvW8h7hX/facebook.png"> Continue with Facebook</div>
+                    <div class="auth-footer">Have an account? <span onclick="openAuthModal('login')">Log in</span></div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="auth-title">Log in</div>
+                    <input type="email" class="auth-input" placeholder="Email">
+                    <div style="position:relative;">
+                        <input type="password" class="auth-input" placeholder="Password">
+                        <svg style="position:absolute; right:10px; top:18px; color:#666;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>
+                    </div>
+                    <div style="text-align:right; font-size:14px; color:#999; margin: 15px 0 25px;">Forgot password?</div>
+                    <p class="auth-legal-small">By logging into Vimeo, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.</p>
+                    <button class="auth-submit-btn" style="background:#88D8F0;">Log in</button>
+                    <div class="social-btn"><img src="https://i.postimg.cc/qB5377yT/google.png"> Continue with Google</div>
+                    <div class="social-btn"><img src="https://i.postimg.cc/mD8V1G3y/apple.png"> Continue with Apple</div>
+                    <div class="social-btn"><img src="https://i.postimg.cc/XvW8h7hX/facebook.png"> Continue with Facebook</div>
+                    <div class="auth-footer">Don't have an account? <span onclick="openAuthModal('join')">Join</span></div>
+                `;
+            }
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+
         function handleBtnClick(btn) {
             const spinner = btn.querySelector('.exact-8-spinner');
             spinner.style.display = 'block';
@@ -511,14 +600,7 @@
                 const player = new Vimeo.Player(iframe);
                 playersNew[idx] = player;
 
-                let loadTimeout = setTimeout(() => {
-                    if (currentIndexNew === idx) {
-                        switchVideoNew((idx + 1) % totalSlidesNew);
-                    }
-                }, 1000); 
-
                 player.on('loaded', () => {
-                    clearTimeout(loadTimeout);
                     document.getElementById('media-loader').style.display = 'none';
                 });
 
@@ -528,12 +610,13 @@
 
                 player.on('error', () => {
                     document.getElementById('media-loader').style.display = 'flex';
-                    switchVideoNew((idx + 1) % totalSlidesNew);
+                    setTimeout(() => switchVideoNew((idx + 1) % totalSlidesNew), 500);
                 });
             });
 
             document.querySelectorAll('.video-slide-new img').forEach((img, idx) => {
                 img.onerror = () => {
+                    document.getElementById('media-loader').style.display = 'flex';
                     switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
                 };
             });
@@ -546,7 +629,7 @@
             clearInterval(sliderTimer);
             sliderTimer = setInterval(() => {
                 switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
-            }, 6000); // الانتقال كل 6 ثوانٍ
+            }, 7000); 
         }
 
         function switchVideoNew(index) {
@@ -564,29 +647,26 @@
             if(slides[index]) slides[index].classList.add('active');
             if(dots[index]) dots[index].classList.add('active');
 
-            let loadCheck = setTimeout(() => {
-                loader.style.display = 'flex';
-            }, 400);
+            let emergencyTimeout = setTimeout(() => {
+                loader.style.display = 'flex'; 
+                isTransitioning = false;
+                switchVideoNew((index + 1) % totalSlidesNew);
+            }, 3000);
 
             if (index < 2) {
                 playersNew.forEach((p, i) => {
                     if (i === index && p) { 
                         p.play().then(() => {
-                            clearTimeout(loadCheck);
+                            clearTimeout(emergencyTimeout);
                             loader.style.display = 'none';
                             isTransitioning = false;
-                        }).catch(() => {
-                            clearTimeout(loadCheck);
-                            loader.style.display = 'flex';
-                            isTransitioning = false;
-                            setTimeout(() => switchVideoNew((index + 1) % totalSlidesNew), 200);
-                        }); 
+                        }).catch(() => {}); 
                     } 
                     else if(p) { p.pause().catch(() => {}); p.setCurrentTime(0).catch(() => {}); }
                 });
             } else {
                 playersNew.forEach(p => { if(p) { p.pause().catch(() => {}); p.setCurrentTime(0).catch(() => {}); } });
-                clearTimeout(loadCheck);
+                clearTimeout(emergencyTimeout);
                 loader.style.display = 'none';
                 isTransitioning = false;
             }
@@ -601,7 +681,7 @@
         gestureZoneN.addEventListener('touchend', e => { 
             touchendXN = e.changedTouches[0].screenX; 
             handleGestureN(); 
-            startAutoCycle(); // إعادة ضبط المؤقت عند التفاعل اليدوي
+            startAutoCycle(); 
         }, {passive: true});
         
         function handleGestureN() {
@@ -613,19 +693,18 @@
         const globeIcon = `<svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>`;
 
         const regionConfigs = [
-            { id: 'mena', ar: "الشرق الأوسط", en: "MENA", type: 'icon', svg: menaIcon },
             { id: 'algeria', ar: "الجزائر", en: "Algeria", flag: 'https://flagcdn.com/dz.svg' },
             { id: 'egypt', ar: "مصر", en: "Egypt", flag: 'https://flagcdn.com/eg.svg' },
             { id: 'iraq', ar: "العراق", en: "Iraq", flag: 'https://flagcdn.com/iq.svg' },
+            { id: 'jordan', ar: "الأردن", en: "Jordan", flag: 'https://flagcdn.com/jo.svg' },
+            { id: 'mena', ar: "الشرق الأوسط وشمال أفريقيا", en: "MENA", type: 'icon', svg: menaIcon },
             { id: 'morocco', ar: "المغرب", en: "Morocco", flag: 'https://flagcdn.com/ma.svg' },
             { id: 'nigeria', ar: "نيجيريا", en: "Nigeria", flag: 'https://flagcdn.com/ng.svg' },
             { id: 'oman', ar: "عمان", en: "Oman", flag: 'https://flagcdn.com/om.svg' },
             { id: 'palestine', ar: "فلسطين", en: "Palestine", flag: 'https://flagcdn.com/ps.svg' },
             { id: 'qatar', ar: "قطر", en: "Qatar", flag: 'https://flagcdn.com/qa.svg' },
             { id: 'saudi', ar: "السعودية", en: "Saudi Arabia", flag: 'https://flagcdn.com/sa.svg' },
-            { id: 'tunisia', ar: "تونس", en: "Tunisia", flag: 'https://flagcdn.com/tn.svg' },
-            { id: 'uae', ar: "الإمارات", en: "UAE", flag: 'https://flagcdn.com/ae.svg' },
-            { id: 'other', ar: "منطقة أخرى", en: "Other Region", type: 'icon', svg: globeIcon }
+            { id: 'uae', ar: "الإمارات", en: "UAE", flag: 'https://flagcdn.com/ae.svg' }
         ];
 
         function openSelection() {
@@ -650,7 +729,7 @@
                 box.className = i === tempRegIdx ? 'option-box selected' : 'option-box';
                 box.onclick = () => setTempReg(i);
                 let icon = reg.type === 'icon' ? reg.svg : `<img src="${reg.flag}">`;
-                box.innerHTML = `<span>${reg[tempLang]}</span> ${icon}`;
+                box.innerHTML = icon + `<span>${reg[tempLang]}</span>`;
                 container.appendChild(box);
             });
 
