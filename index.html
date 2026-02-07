@@ -417,7 +417,8 @@
         [dir="rtl"] .social-btn .google-icon-svg { left: auto; right: 20px; }
         
         .auth-footer { margin: 40px 0 20px; color: #6b7280; font-size: 16px; text-align: center; font-weight: 500; }
-        .auth-footer span { font-weight: 800; color: #000; cursor: pointer; }
+        
+        .auth-footer span { font-weight: 800; color: #386E2C; cursor: pointer; text-decoration: underline; }
         
         .auth-legal-small { font-size: 13px; color: #000; line-height: 1.5; margin: 20px 0; font-weight: 500; }
         
@@ -444,7 +445,29 @@
         <header>
             <div class="header-content">
                 <div class="brand-section">
-                    <img src="https://i.postimg.cc/MKdMnLSy/servio.png" alt="logo" class="logo-img" decoding="async">
+                    <svg class="logo-img" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg" style="height: 35px; width: auto;">
+                        <defs>
+                            <linearGradient id="deepGreenHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2d5a1e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1a3611;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="vibrantGreenHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#74a367;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#5a854f;stop-opacity:1" />
+                            </linearGradient>
+                            <mask id="whiteGapHeader">
+                                <rect width="1000" height="800" fill="white" />
+                                <circle cx="350" cy="400" r="362" fill="black" />
+                            </mask>
+                        </defs>
+                        <circle cx="350" cy="400" r="350" fill="url(#deepGreenHeader)" />
+                        <circle cx="650" cy="400" r="350" fill="url(#vibrantGreenHeader)" mask="url(#whiteGapHeader)" fill-opacity="0.95" />
+                        <g transform="rotate(-38 500 400)">
+                            <rect x="290" y="390" width="75" height="145" rx="37.5" fill="#FFFFFF" />
+                            <rect x="425" y="80" width="155" height="640" rx="77.5" fill="#FFFFFF" />
+                            <rect x="640" y="445" width="75" height="145" rx="37.5" fill="#FFFFFF" />
+                        </g>
+                    </svg>
                     <div class="v-line"></div>
                     <div class="title-box">
                         <span style="text-align: right !important;">مركز الخدمات الرقمية</span>
