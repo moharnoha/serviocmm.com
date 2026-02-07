@@ -263,11 +263,10 @@
             max-width: 320px; margin-top: 15px;
         }
 
-        .legal-new span {
-            text-decoration: underline; font-weight: 600; color: #6B9361;
+        .legal-new span, .auth-legal-small span {
+            text-decoration: underline; font-weight: 600; color: #386E2C !important;
         }
 
-        /* نافذة اختيار اللغة والمنطقة */
         .selection-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: flex-end;
@@ -344,7 +343,6 @@
             background: rgba(255,255,255,0.7); z-index: 10002; justify-content: center; align-items: center;
         }
 
-        /* MODAL STYLES UPDATED FOR FULL PAGE APPEARANCE */
         .auth-modal {
             display: none; 
             position: fixed; 
@@ -422,13 +420,14 @@
         .auth-footer span { font-weight: 800; color: #000; cursor: pointer; }
         
         .auth-legal-small { font-size: 13px; color: #000; line-height: 1.5; margin: 20px 0; font-weight: 500; }
-        .auth-legal-small span { text-decoration: underline; font-weight: 600; cursor: pointer; }
         
         .toggle-password { position: absolute; right: 0; top: 16px; cursor: pointer; color: #374151; }
         [dir="rtl"] .toggle-password { right: auto; left: 0; }
         
         .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 25px 0; cursor: pointer; }
-        .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; }
+        .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; position: relative; transition: background 0.2s; }
+        .custom-checkbox.checked { background: #000; }
+        .custom-checkbox.checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 14px; font-weight: 800; }
     </style>
     <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
@@ -624,6 +623,22 @@
             }, 2000);
         }
 
+        function togglePassword(icon) {
+            const input = icon.parentElement.querySelector('input');
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            
+            if (isPassword) {
+                icon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+            } else {
+                icon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>`;
+            }
+        }
+
+        function toggleCheckbox(el) {
+            el.classList.toggle('checked');
+        }
+
         function openAuthModal(type) {
             const container = document.getElementById('auth-content');
             const lang = localStorage.getItem('pref_lang') || 'ar';
@@ -672,9 +687,9 @@
                     <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${cur.emailPlace}"></div>
                     <div class="auth-input-group">
                         <input type="password" class="auth-input" placeholder="${cur.passPlace}">
-                        <div class="toggle-password"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
+                        <div class="toggle-password" onclick="togglePassword(this)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
-                    <div class="custom-checkbox-wrapper">
+                    <div class="custom-checkbox-wrapper" onclick="toggleCheckbox(this.querySelector('.custom-checkbox'))">
                         <div class="custom-checkbox"></div>
                         <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">${cur.news}</div>
                     </div>
@@ -692,7 +707,7 @@
                     <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${cur.emailPlace}"></div>
                     <div class="auth-input-group">
                         <input type="password" class="auth-input" placeholder="${cur.passPlace}">
-                        <div class="toggle-password"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
+                        <div class="toggle-password" onclick="togglePassword(this)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
                     <div style="text-align:inherit; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">${cur.forgot}</div>
                     <p class="auth-legal-small">${cur.legalLogin}</p>
