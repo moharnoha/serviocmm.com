@@ -1,175 +1,705 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="notranslate" translate="no"> 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>serviocmm UI - Perfect Spacing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate">
+    <title>serviocmm - Final Version</title>
+    <link rel="preconnect" href="https://player.vimeo.com">
+    <link rel="preconnect" href="https://i.postimg.cc">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        /* تصفير الهوامش لضمان ملء الشاشة بنسبة 100% */
-        * {
-            margin: 0;
-            padding: 0;
+        :root { 
+            --header-green: #FFFFFF; 
+            --login-bg: #386E2C; 
+            --google-section-bg: #EAF0E9; 
+            --platform-bg: #F2F1F0;
+            --garena-red: #386E2C;
+            --success-green: #22c55e;
+            --primary-green: #2F5822;
+        }
+
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Cairo', 'Inter', sans-serif; 
+            background-color: #F2F1F0; 
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            direction: rtl !important; 
+        }
+
+        .mobile-container { 
+            width: 100%; 
+            min-height: 100vh; 
+            display: flex; flex-direction: column; 
+            position: relative;
+            flex-grow: 1;
+        }
+
+        header { 
+            width: 100%; height: 70px; 
+            background-color: var(--header-green); 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 0 15px;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            position: sticky; 
+            top: 0; z-index: 1000;
+            direction: rtl !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        body, html {
-            height: 100%;
+        .header-content {
             width: 100%;
-            overflow: hidden;
-            background-color: #fff;
-        }
-
-        /* الحاوية الرئيسية بملء الشاشة */
-        .page-container {
+            max-width: 480px;
+            margin: 0 auto;
             display: flex;
-            flex-direction: column;
-            height: 100vh;
-            width: 100vw;
-        }
-
-        /* الجزء الأخضر - توزيع واسع لمنع الضغط */
-        .green-area {
-            background-color: #1a8917; 
-            flex: 1.8; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around; /* تباعد كبير بين العناصر */
             align-items: center;
-            padding: 40px 30px;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
+            justify-content: space-between;
+        }
+
+        @media (min-width: 481px) {
+            .header-content {
+                max-width: 100%;
+                padding: 0 40px;
+            }
+        }
+
+        .brand-section { display: flex; align-items: center; flex-direction: row !important; }
+        .logo-img { height: 35px; width: auto; display: block; }
+        .v-line { width: 1px; height: 30px; background-color: rgba(0,0,0,0.1); margin: 0 12px; }
+        
+        .title-box { display: flex; flex-direction: column; text-align: right !important; }
+        .title-box span:first-child { font-size: 11px; font-weight: 800; color: #1a202c; margin-bottom: 2px; letter-spacing: 0px; }
+        .title-box span:last-child { font-size: 9px; font-weight: 600; color: #64748b; letter-spacing: 0px; }
+
+        .info-display-wrapper { 
+            display: flex; align-items: center; background: #FFFFFF; 
+            border: 1px solid #E2E8F0; border-radius: 8px; 
+            padding: 0 10px; height: 40px; cursor: pointer;
+            box-sizing: border-box; gap: 8px; flex-direction: row !important;
+        }
+        .display-text { font-size: 11px; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 5px; flex-direction: row !important; white-space: nowrap; }
+        .nav-icon { width: 22px; height: 22px; fill: #1e293b !important; display: block; flex-shrink: 0; }
+
+        .exact-8-spinner {
+            position: relative;
+            width: 44px;
+            height: 44px;
+            transform: scale(0.6);
+            display: none;
+        }
+        .exact-8-spinner div {
+            position: absolute;
+            width: 6px;
+            height: 14px;
+            background: #666;
+            border-radius: 10px;
+            left: 19px;
+            top: 0;
+            transform-origin: 3px 22px;
+            animation: spinner-fade 0.8s linear infinite;
+        }
+        .exact-8-spinner div:nth-child(1) { transform: rotate(0deg); animation-delay: -0.7s; }
+        .exact-8-spinner div:nth-child(2) { transform: rotate(45deg); animation-delay: -0.6s; }
+        .exact-8-spinner div:nth-child(3) { transform: rotate(90deg); animation-delay: -0.5s; }
+        .exact-8-spinner div:nth-child(4) { transform: rotate(135deg); animation-delay: -0.4s; }
+        .exact-8-spinner div:nth-child(5) { transform: rotate(180deg); animation-delay: -0.3s; }
+        .exact-8-spinner div:nth-child(6) { transform: rotate(225deg); animation-delay: -0.2s; }
+        .exact-8-spinner div:nth-child(7) { transform: rotate(270deg); animation-delay: -0.1s; }
+        .exact-8-spinner div:nth-child(8) { transform: rotate(315deg); animation-delay: 0s; }
+
+        @keyframes spinner-fade {
+            0% { background: #ffffff; opacity: 1; }
+            100% { background: #666; opacity: 0.3; }
+        }
+
+        #media-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            display: none;
+        }
+
+        .login-section { padding: 0 10%; background: #F2F1F0; margin-top: -10px; } 
+        .login-card {
+            background: #ffffff; border-radius: 12px; padding: 30px;
+            border: 1px solid #e9ecef;
+            max-width: 600px; margin: 0 auto;
+        }
+        
+        .new-section-container {
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            width: 100%;
+            background-color: #ffffff;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        .hero-box-empty-new {
+            background-color: #F3F2F2; 
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px 0;
+            width: 100%;
+        }
+
+        .header-content-new {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #000000;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .logo-svg-new { width: 32px; height: 32px; }
+
+        .hero-video-container-new {
+            width: 80%;
+            height: 250px;
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            touch-action: pan-y;
+            transform: translateZ(0);
+        }
+
+        .video-overlay-new {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5; background: transparent;
+        }
+
+        .video-slide-new {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; transition: opacity 0.4s ease-in-out;
+            will-change: opacity;
+        }
+
+        .video-slide-new.active { opacity: 1; }
+        .hero-video-container-new iframe { width: 100%; height: 100%; border: none; }
+        .hero-video-container-new img { width: 100%; height: 100%; object-fit: contain; background-color: transparent; }
+
+        .pagination-dots-new {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+            z-index: 10;
+        }
+
+        .dot-new {
+            width: 8px; height: 8px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 50%; cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .dot-new.active { background-color: #000000; }
+
+        .hero-text-new {
+            font-size: 16px; color: #1c1c1e;
+            font-weight: 500; text-align: center;
+            padding: 0 20px;
+        }
+
+        .footer-actions-new {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 30px 40px 30px;
+            gap: 15px;
+        }
+
+        .btn-new {
+            width: 100%; max-width: 480px;
+            padding: 18px; border-radius: 16px;
+            border: none; font-size: 18px;
+            font-weight: 700; cursor: pointer;
+            transition: transform 0.1s ease, opacity 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
         }
 
-        /* اللوغو الجديد */
-        .brand-name {
-            color: white;
-            font-size: 42px;
-            font-weight: 800;
-            letter-spacing: -2px;
-            margin-top: 20px;
-            text-transform: lowercase;
-        }
-
-        /* العنوان الرئيسي بتباعد أسطر احترافي */
-        .hero-title {
-            color: white;
-            font-size: clamp(42px, 9vw, 80px);
-            font-weight: 900;
+        .btn-new span {
+            flex: 1;
             text-align: center;
-            line-height: 0.92;
-            letter-spacing: -1.5px;
-            margin: 30px 0; 
         }
 
-        /* منطقة المبدع في الأسفل */
-        .creator-section {
-            align-self: flex-start;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: white;
-            width: 100%;
-            padding-bottom: 20px;
-            padding-left: 10px;
+        .btn-new .exact-8-spinner {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%) scale(0.5);
+            margin: 0;
         }
 
-        .badge-sp {
-            width: 52px;
-            height: 52px;
-            border: 2px solid white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 900;
-            font-size: 16px;
+        .btn-new:active { transform: scale(0.98); opacity: 0.9; }
+        .btn-primary-new { background-color: var(--primary-green); color: #ffffff; }
+        .btn-secondary-new { background-color: #f2f2f7; color: #000000; }
+
+        .legal-new {
+            font-size: 11px; text-align: center;
+            color: #1c1c1e; line-height: 1.4;
+            max-width: 320px; margin-top: 15px;
         }
 
-        .details p:first-child {
-            font-size: 10px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .legal-new span {
+            text-decoration: underline; font-weight: 600; color: #6B9361;
         }
 
-        .details p:last-child {
-            font-size: 16px;
-            font-weight: 600;
-            opacity: 0.95;
+        /* نافذة اختيار اللغة والمنطقة */
+        .selection-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: flex-end;
+        }
+        
+        .selection-sheet {
+            width: 100%; max-width: 500px; background: white; border-radius: 24px 24px 0 0; 
+            padding: 20px; box-sizing: border-box; max-height: 90vh; overflow-y: auto;
+            position: relative;
         }
 
-        /* القسم السفلي الأبيض */
-        .white-area {
-            flex: 1; 
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 30px;
-            gap: 15px; 
+        .sheet-header {
+            display: flex; justify-content: center; align-items: center;
+            position: relative; margin-bottom: 25px; padding-top: 10px;
         }
 
-        .action-button {
-            width: 100%;
-            max-width: 500px;
-            padding: 22px;
-            border-radius: 20px;
-            border: none;
-            font-size: 22px;
-            font-weight: 900;
-            cursor: pointer;
+        .sheet-title { font-size: 18px; font-weight: 800; color: #333; }
+        
+        .close-sheet {
+            position: absolute; right: 0; cursor: pointer;
+            width: 24px; height: 24px; color: #666;
         }
 
-        .btn-join { background-color: #000; color: white; }
-        .btn-login { background-color: #f2f2f7; color: #000; }
-        .btn-skip { background: none; color: #000; font-size: 22px; margin-top: 5px; }
-
-        /* الشروط القانونية المحدثة بالاسم الجديد */
-        .legal-footer {
-            font-size: 13px;
-            text-align: center;
-            color: #111;
-            line-height: 1.6;
-            margin-top: 20px;
-            max-width: 400px;
+        .section-label {
+            font-size: 14px; font-weight: 700; color: #666;
+            margin: 15px 0 10px; text-align: right; width: 100%;
         }
 
-        .legal-footer span {
-            text-decoration: underline;
-            font-weight: 700;
+        .options-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+            width: 100%; margin-bottom: 20px;
+        }
+
+        .option-box {
+            background: #fff; border: 1px solid #e0e0e0; border-radius: 10px;
+            padding: 12px; display: flex; align-items: center; justify-content: flex-end;
+            gap: 10px; cursor: pointer; transition: all 0.2s;
+            font-size: 14px; font-weight: 600; min-height: 50px;
+            box-sizing: border-box;
+        }
+
+        .option-box.selected { border-color: var(--primary-green); color: var(--primary-green); }
+        .option-box img, .option-box .nav-icon { width: 22px; height: 16px; object-fit: cover; }
+
+        .save-btn {
+            width: 100%; background: var(--primary-green); color: white;
+            padding: 15px; border-radius: 12px; border: none;
+            font-size: 18px; font-weight: 800; cursor: pointer;
+            margin-top: 10px; margin-bottom: 20px;
+        }
+
+        .custom-dialog-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); z-index: 10001; justify-content: center; align-items: center;
+        }
+        .custom-dialog {
+            width: 80%; max-width: 300px; background: white; border-radius: 14px; overflow: hidden;
+            display: flex; flex-direction: column; text-align: center;
+        }
+        .dialog-body { padding: 25px 20px; }
+        .dialog-title { font-weight: 800; font-size: 16px; margin-bottom: 8px; color: #000; }
+        .dialog-text { font-size: 13px; color: #333; line-height: 1.5; }
+        .dialog-btn {
+            border-top: 1px solid #eee; padding: 15px; font-weight: 700; color: #007aff;
+            cursor: pointer; text-align: center; font-size: 15px;
+        }
+
+        #global-spinner-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.7); z-index: 10002; justify-content: center; align-items: center;
         }
     </style>
+    <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
-<body>
+<body class="notranslate">
 
-    <div class="page-container">
-        <div class="green-area">
-            <div class="brand-name">serviocmm</div>
-            
-            <h1 class="hero-title">Watch videos<br>from award<br>winning<br>creators</h1>
-
-            <div class="creator-section">
-                <div class="badge-sp">SP</div>
-                <div class="details">
-                    <p>WHAT ON EARTH</p>
-                    <p>jimmy marble</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="white-area">
-            <button class="action-button btn-join">Join for free</button>
-            <button class="action-button btn-login">Log in</button>
-            <button class="action-button btn-skip">Skip</button>
-
-            <p class="legal-footer">
-                By using the serviocmm app, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.
-            </p>
+    <div id="global-spinner-overlay">
+        <div class="exact-8-spinner" style="display: block; transform: scale(1);">
+            <div></div><div></div><div></div><div></div>
+            <div></div><div></div><div></div><div></div>
         </div>
     </div>
 
+    <div class="mobile-container">
+        <header>
+            <div class="header-content">
+                <div class="brand-section">
+                    <img src="https://i.postimg.cc/MKdMnLSy/servio.png" alt="logo" class="logo-img" decoding="async">
+                    <div class="v-line"></div>
+                    <div class="title-box">
+                        <span style="text-align: right !important;">مركز الخدمات الرقمية</span>
+                        <span style="text-align: right !important;">Digital Services Center</span>
+                    </div>
+                </div>
+                <div class="header-left-group">
+                    <div class="info-display-wrapper" onclick="openSelection()">
+                        <div id="flag-display"></div>
+                        <div class="display-text">
+                            <span id="label-reg"></span>
+                            <span id="separator-bar" style="opacity:0.3; display:none;">|</span>
+                            <span id="label-lng"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="new-section-container">
+            <div class="hero-box-empty-new">
+                <div class="header-content-new">
+                    <svg class="logo-svg-new" viewBox="0 0 1000 800" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="deepGreenNew" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#2d5a1e;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#1a3611;stop-opacity:1" />
+                            </linearGradient>
+                            <linearGradient id="vibrantGreenNew" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#74a367;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#5a854f;stop-opacity:1" />
+                            </linearGradient>
+                            <mask id="whiteGapNew">
+                                <rect width="1000" height="800" fill="white" />
+                                <circle cx="350" cy="400" r="362" fill="black" />
+                            </mask>
+                        </defs>
+                        <circle cx="350" cy="400" r="350" fill="url(#deepGreenNew)" />
+                        <circle cx="650" cy="400" r="350" fill="url(#vibrantGreenNew)" mask="url(#whiteGapNew)" fill-opacity="0.95" />
+                        <g transform="rotate(-38 500 400)">
+                            <rect x="290" y="390" width="75" height="145" rx="37.5" fill="#FFFFFF" />
+                            <rect x="425" y="80" width="155" height="640" rx="77.5" fill="#FFFFFF" />
+                            <rect x="640" y="445" width="75" height="145" rx="37.5" fill="#FFFFFF" />
+                        </g>
+                    </svg>
+                    serviocmm
+                </div>
+                
+                <div class="hero-video-container-new" id="videoContainerNew">
+                    <div id="media-loader">
+                        <div class="exact-8-spinner" style="display: block;">
+                            <div></div><div></div><div></div><div></div>
+                            <div></div><div></div><div></div><div></div>
+                        </div>
+                    </div>
+                    <div class="video-overlay-new"></div>
+                    <div class="video-slide-new active" data-index="0">
+                        <iframe id="vimeo-new-0" src="https://player.vimeo.com/video/1162647928?background=1&autoplay=1&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <div class="video-slide-new" data-index="1">
+                        <iframe id="vimeo-new-1" src="https://player.vimeo.com/video/1162676708?background=1&autoplay=0&loop=0&autopause=0&byline=0&title=0&portrait=0&muted=1&quality=auto&speed=1" allow="autoplay; fullscreen"></iframe>
+                    </div>
+                    <div class="video-slide-new" data-index="2">
+                        <img src="https://i.postimg.cc/7LjvRyMB/tsmym-bdwn-ʿnwan.png" alt="Slide 3" loading="lazy" decoding="async">
+                    </div>
+                    <div class="video-slide-new" data-index="3">
+                        <img src="https://i.postimg.cc/GhgXKxjL/tsmym-bdwn-ʿnwan.png" alt="Slide 4" loading="lazy" decoding="async">
+                    </div>
+                </div>
+
+                <div class="pagination-dots-new">
+                    <div class="dot-new active" onclick="switchVideoNew(0)"></div>
+                    <div class="dot-new" onclick="switchVideoNew(1)"></div>
+                    <div class="dot-new" onclick="switchVideoNew(2)"></div>
+                    <div class="dot-new" onclick="switchVideoNew(3)"></div>
+                </div>
+                <p class="hero-text-new" id="hero-text-label">The Largest Platform for Followers & Services in MENA</p>
+            </div>
+
+            <div class="footer-actions-new">
+                <button class="btn-new btn-primary-new" id="btn-join-label" onclick="handleBtnClick(this)">
+                    <span>Join for free</span>
+                    <div class="exact-8-spinner">
+                        <div></div><div></div><div></div><div></div>
+                        <div></div><div></div><div></div><div></div>
+                    </div>
+                </button>
+                <button class="btn-new btn-secondary-new" id="btn-login-label" onclick="handleBtnClick(this)">
+                    <span>Log in</span>
+                    <div class="exact-8-spinner">
+                        <div></div><div></div><div></div><div></div>
+                        <div></div><div></div><div></div><div></div>
+                    </div>
+                </button>
+                <p class="legal-new" id="legal-label">
+                    By using the serviocmm app, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.
+                </p>
+            </div>
+        </div>
+
+        <div class="content-sections-wrapper"></div>
+    </div>
+
+    <div id="overlay" class="selection-overlay" onclick="closeSelection()">
+        <div class="selection-sheet" onclick="event.stopPropagation()">
+            <div class="sheet-header">
+                <div class="close-sheet" onclick="closeSelection()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </div>
+                <div class="sheet-title" id="sheet-title-label">لغة/منطقة</div>
+            </div>
+
+            <div class="section-label" id="lang-section-label">لغة</div>
+            <div class="options-grid">
+                <div class="option-box" id="lang-en" onclick="setTempLang('en')"><span>EN</span></div>
+                <div class="option-box" id="lang-ar" onclick="setTempLang('ar')"><span>العربية</span></div>
+            </div>
+
+            <div class="section-label" id="region-section-label">منطقة</div>
+            <div class="options-grid" id="regions-grid-container"></div>
+
+            <button class="save-btn" id="save-btn-label" onclick="applyChanges()">حفظ</button>
+        </div>
+    </div>
+
+    <div id="dialog-overlay" class="custom-dialog-overlay" onclick="closeDialog()">
+        <div class="custom-dialog" onclick="event.stopPropagation()">
+            <div class="dialog-body">
+                <div class="dialog-title" id="dialog-title"></div>
+                <div class="dialog-text" id="dialog-text"></div>
+            </div>
+            <div class="dialog-btn" id="dialog-btn" onclick="closeDialog()"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentIndexNew = 0;
+        const totalSlidesNew = 4;
+        const playersNew = [];
+        let sliderTimer;
+        let isTransitioning = false;
+        
+        let tempLang = localStorage.getItem('pref_lang') || 'ar';
+        let tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
+
+        function handleBtnClick(btn) {
+            const spinner = btn.querySelector('.exact-8-spinner');
+            spinner.style.display = 'block';
+            setTimeout(() => { spinner.style.display = 'none'; }, 2000);
+        }
+
+        function initSlider() {
+            document.querySelectorAll('iframe[id^="vimeo-new-"]').forEach((iframe, idx) => {
+                const player = new Vimeo.Player(iframe);
+                playersNew[idx] = player;
+
+                let loadTimeout = setTimeout(() => {
+                    if (currentIndexNew === idx) {
+                        switchVideoNew((idx + 1) % totalSlidesNew);
+                    }
+                }, 1000); 
+
+                player.on('loaded', () => {
+                    clearTimeout(loadTimeout);
+                    document.getElementById('media-loader').style.display = 'none';
+                });
+
+                player.on('ended', () => {
+                    switchVideoNew((idx + 1) % totalSlidesNew);
+                });
+
+                player.on('error', () => {
+                    document.getElementById('media-loader').style.display = 'flex';
+                    switchVideoNew((idx + 1) % totalSlidesNew);
+                });
+            });
+
+            document.querySelectorAll('.video-slide-new img').forEach((img, idx) => {
+                img.onerror = () => {
+                    switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
+                };
+            });
+
+            switchVideoNew(0);
+            startAutoCycle();
+        }
+
+        function startAutoCycle() {
+            clearInterval(sliderTimer);
+            sliderTimer = setInterval(() => {
+                switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
+            }, 6000); // الانتقال كل 6 ثوانٍ
+        }
+
+        function switchVideoNew(index) {
+            if (isTransitioning) return;
+            isTransitioning = true;
+            
+            const loader = document.getElementById('media-loader');
+            currentIndexNew = index;
+            const slides = document.querySelectorAll('.video-slide-new');
+            const dots = document.querySelectorAll('.dot-new');
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if(slides[index]) slides[index].classList.add('active');
+            if(dots[index]) dots[index].classList.add('active');
+
+            let loadCheck = setTimeout(() => {
+                loader.style.display = 'flex';
+            }, 400);
+
+            if (index < 2) {
+                playersNew.forEach((p, i) => {
+                    if (i === index && p) { 
+                        p.play().then(() => {
+                            clearTimeout(loadCheck);
+                            loader.style.display = 'none';
+                            isTransitioning = false;
+                        }).catch(() => {
+                            clearTimeout(loadCheck);
+                            loader.style.display = 'flex';
+                            isTransitioning = false;
+                            setTimeout(() => switchVideoNew((index + 1) % totalSlidesNew), 200);
+                        }); 
+                    } 
+                    else if(p) { p.pause().catch(() => {}); p.setCurrentTime(0).catch(() => {}); }
+                });
+            } else {
+                playersNew.forEach(p => { if(p) { p.pause().catch(() => {}); p.setCurrentTime(0).catch(() => {}); } });
+                clearTimeout(loadCheck);
+                loader.style.display = 'none';
+                isTransitioning = false;
+            }
+        }
+
+        let touchstartXN = 0;
+        let touchendXN = 0;
+        const gestureZoneN = document.querySelector('.video-overlay-new');
+        gestureZoneN.addEventListener('touchstart', e => { 
+            touchstartXN = e.changedTouches[0].screenX; 
+        }, {passive: true});
+        gestureZoneN.addEventListener('touchend', e => { 
+            touchendXN = e.changedTouches[0].screenX; 
+            handleGestureN(); 
+            startAutoCycle(); // إعادة ضبط المؤقت عند التفاعل اليدوي
+        }, {passive: true});
+        
+        function handleGestureN() {
+            if (touchendXN < touchstartXN - 50) switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
+            if (touchendXN > touchstartXN + 50) switchVideoNew((currentIndexNew - 1 + totalSlidesNew) % totalSlidesNew);
+        }
+
+        const menaIcon = `<svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>`;
+        const globeIcon = `<svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>`;
+
+        const regionConfigs = [
+            { id: 'mena', ar: "الشرق الأوسط", en: "MENA", type: 'icon', svg: menaIcon },
+            { id: 'algeria', ar: "الجزائر", en: "Algeria", flag: 'https://flagcdn.com/dz.svg' },
+            { id: 'egypt', ar: "مصر", en: "Egypt", flag: 'https://flagcdn.com/eg.svg' },
+            { id: 'iraq', ar: "العراق", en: "Iraq", flag: 'https://flagcdn.com/iq.svg' },
+            { id: 'morocco', ar: "المغرب", en: "Morocco", flag: 'https://flagcdn.com/ma.svg' },
+            { id: 'nigeria', ar: "نيجيريا", en: "Nigeria", flag: 'https://flagcdn.com/ng.svg' },
+            { id: 'oman', ar: "عمان", en: "Oman", flag: 'https://flagcdn.com/om.svg' },
+            { id: 'palestine', ar: "فلسطين", en: "Palestine", flag: 'https://flagcdn.com/ps.svg' },
+            { id: 'qatar', ar: "قطر", en: "Qatar", flag: 'https://flagcdn.com/qa.svg' },
+            { id: 'saudi', ar: "السعودية", en: "Saudi Arabia", flag: 'https://flagcdn.com/sa.svg' },
+            { id: 'tunisia', ar: "تونس", en: "Tunisia", flag: 'https://flagcdn.com/tn.svg' },
+            { id: 'uae', ar: "الإمارات", en: "UAE", flag: 'https://flagcdn.com/ae.svg' },
+            { id: 'other', ar: "منطقة أخرى", en: "Other Region", type: 'icon', svg: globeIcon }
+        ];
+
+        function openSelection() {
+            tempLang = localStorage.getItem('pref_lang') || 'ar';
+            tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
+            renderSheet();
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        function closeSelection() { document.getElementById('overlay').style.display = 'none'; }
+        function setTempLang(l) { tempLang = l; renderSheet(); }
+        function setTempReg(i) { tempRegIdx = i; renderSheet(); }
+
+        function renderSheet() {
+            const container = document.getElementById('regions-grid-container');
+            container.innerHTML = '';
+            document.getElementById('lang-en').className = tempLang === 'en' ? 'option-box selected' : 'option-box';
+            document.getElementById('lang-ar').className = tempLang === 'ar' ? 'option-box selected' : 'option-box';
+
+            regionConfigs.forEach((reg, i) => {
+                const box = document.createElement('div');
+                box.className = i === tempRegIdx ? 'option-box selected' : 'option-box';
+                box.onclick = () => setTempReg(i);
+                let icon = reg.type === 'icon' ? reg.svg : `<img src="${reg.flag}">`;
+                box.innerHTML = `<span>${reg[tempLang]}</span> ${icon}`;
+                container.appendChild(box);
+            });
+
+            const labels = {
+                ar: { title: "لغة/منطقة", lang: "لغة", reg: "منطقة", save: "حفظ" },
+                en: { title: "Language/Region", lang: "Language", reg: "Region", save: "Save" }
+            };
+            document.getElementById('sheet-title-label').innerText = labels[tempLang].title;
+            document.getElementById('lang-section-label').innerText = labels[tempLang].lang;
+            document.getElementById('region-section-label').innerText = labels[tempLang].reg;
+            document.getElementById('save-btn-label').innerText = labels[tempLang].save;
+        }
+
+        function applyChanges() {
+            closeSelection();
+            document.getElementById('global-spinner-overlay').style.display = 'flex';
+            setTimeout(() => {
+                localStorage.setItem('pref_lang', tempLang);
+                localStorage.setItem('pref_reg_idx', tempRegIdx);
+                updateUI();
+                document.getElementById('global-spinner-overlay').style.display = 'none';
+            }, 1500);
+        }
+
+        function updateUI() {
+            const lang = localStorage.getItem('pref_lang') || 'ar';
+            const regIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
+            const reg = regionConfigs[regIdx];
+            document.documentElement.setAttribute('lang', lang);
+            document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+            document.getElementById('label-lng').innerText = lang.toUpperCase();
+            document.getElementById('label-reg').innerText = reg[lang];
+            document.getElementById('separator-bar').style.display = 'inline';
+            document.getElementById('flag-display').innerHTML = reg.type === 'icon' ? reg.svg : `<img src="${reg.flag}" class="nav-icon" style="width:24px; height:16px; border-radius:2px; object-fit:cover;" decoding="async">`;
+
+            const translations = {
+                ar: { hero: "المنصة الأكبر للمتابعين والخدمات في الشرق الأوسط", join: "انضم مجاناً", login: "تسجيل الدخول", legal: "باستخدام تطبيق serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا." },
+                en: { hero: "The Largest Platform for Followers & Services in MENA", join: "Join for free", login: "Log in", legal: "By using the serviocmm app, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>." }
+            };
+            document.getElementById('hero-text-label').innerText = translations[lang].hero;
+            document.querySelector('#btn-join-label span').innerText = translations[lang].join;
+            document.querySelector('#btn-login-label span').innerText = translations[lang].login;
+            document.getElementById('legal-label').innerHTML = translations[lang].legal;
+        }
+
+        function closeDialog() { document.getElementById('dialog-overlay').style.display = 'none'; }
+
+        updateUI();
+        initSlider();
+    </script>
 </body>
 </html>
