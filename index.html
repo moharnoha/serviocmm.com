@@ -612,6 +612,79 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBYNRiMneaU-d6FPMbCnjcWQBX4Tdg50zk", 
+            authDomain: "serviocmm-a65ed.firebaseapp.com", 
+            projectId: "serviocmm-a65ed", 
+            storageBucket: "serviocmm-a65ed.firebasestorage.app", 
+            messagingSenderId: "975373759034", 
+            appId: "1:975373759034:web:645cb5fb48772839453b03" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        async function saveUserToFirestore(user, customName = null) {
+            const lang = localStorage.getItem('pref_lang') || 'ar';
+            const regIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
+            const regions_ar = ["الجزائر", "مصر", "العراق", "الأردن", "الشرق الأوسط وشمال أفريقيا", "المغرب", "نيجيريا", "عمان", "فلسطين", "قطر", "السعودية", "الإمارات"];
+            const regions_en = ["Algeria", "Egypt", "Iraq", "Jordan", "MENA", "Morocco", "Nigeria", "Oman", "Palestine", "Qatar", "Saudi Arabia", "UAE"];
+            
+            const currentRegionName = lang === 'ar' ? regions_ar[regIdx] : regions_en[regIdx];
+            const currentLanguageName = lang === 'ar' ? "العربية" : "English";
+
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            if (!docSnap.exists()) {
+                await setDoc(userRef, {
+                    name: customName || user.displayName || "User",
+                    balance: 0,
+                    total_spend: 0,
+                    email: user.email,
+                    uid: user.uid,
+                    selected_region: currentRegionName,
+                    selected_language: currentLanguageName
+                });
+            } else {
+                await setDoc(userRef, {
+                    selected_region: currentRegionName,
+                    selected_language: currentLanguageName
+                }, { merge: true });
+            }
+            window.location.href = "dashboard/";
+        }
+
+        window.firebaseLogin = async (email, password) => {
+            try {
+                const res = await signInWithEmailAndPassword(auth, email, password);
+                await saveUserToFirestore(res.user);
+            } catch (e) { alert("Error: " + e.message); }
+        };
+
+        window.firebaseJoin = async (name, email, password) => {
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(res.user, { displayName: name });
+                await saveUserToFirestore(res.user, name);
+            } catch (e) { alert("Error: " + e.message); }
+        };
+
+        window.firebaseGoogle = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                await saveUserToFirestore(result.user);
+            } catch (e) { alert("Error: " + e.message); }
+        };
+    </script>
+
     <script>
         let currentIndexNew = 0;
         const totalSlidesNew = 4;
@@ -638,12 +711,18 @@
             }, 800);
         }
 
-        function handleAuthSubmit(btn) {
+        function handleAuthSubmit(btn, type) {
             const spinner = btn.querySelector('.exact-8-spinner');
             spinner.style.display = 'block';
-            setTimeout(() => {
-                spinner.style.display = 'none';
-            }, 2000);
+            const email = document.getElementById('auth-email-in')?.value;
+            const pass = document.getElementById('auth-pass-in')?.value;
+            
+            if(type === 'login') {
+                window.firebaseLogin(email, pass).finally(() => spinner.style.display = 'none');
+            } else {
+                const name = document.getElementById('auth-name-in')?.value;
+                window.firebaseJoin(name, email, pass).finally(() => spinner.style.display = 'none');
+            }
         }
 
         function togglePassword(icon) {
@@ -658,58 +737,24 @@
             }
         }
 
-        function toggleCheckbox(el) {
-            el.classList.toggle('checked');
-        }
+        function toggleCheckbox(el) { el.classList.toggle('checked'); }
 
         function openAuthModal(type) {
             const container = document.getElementById('auth-content');
             const lang = localStorage.getItem('pref_lang') || 'ar';
-            
             const t = {
-                ar: {
-                    joinTitle: "انضم إلى serviocmm",
-                    loginTitle: "تسجيل الدخول",
-                    namePlace: "الاسم",
-                    emailPlace: "البريد الإلكتروني",
-                    passPlace: "كلمة المرور",
-                    news: "أوافق على تلقي النشرات الإخبارية وتحديثات المنتجات والعروض الحصرية من serviocmm.",
-                    legalJoin: "من خلال الانضمام إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.",
-                    legalLogin: "من خلال تسجيل الدخول إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.",
-                    joinBtn: "انضم الآن",
-                    loginBtn: "تسجيل الدخول",
-                    google: "المتابعة باستخدام Google",
-                    haveAccount: "لديك حساب؟",
-                    noAccount: "ليس لديك حساب؟",
-                    forgot: "هل نسيت كلمة المرور؟"
-                },
-                en: {
-                    joinTitle: "Join serviocmm",
-                    loginTitle: "Log in",
-                    namePlace: "Name",
-                    emailPlace: "Email",
-                    passPlace: "Password",
-                    news: "I agree to receive newsletters, product updates, and exclusive offers from serviocmm.",
-                    legalJoin: "By joining serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.",
-                    legalLogin: "By logging into serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.",
-                    joinBtn: "Join",
-                    loginBtn: "Log in",
-                    google: "Continue with Google",
-                    haveAccount: "Have an account?",
-                    noAccount: "Don't have an account?",
-                    forgot: "Forgot password?"
-                }
+                ar: { joinTitle: "انضم إلى serviocmm", loginTitle: "تسجيل الدخول", namePlace: "الاسم", emailPlace: "البريد الإلكتروني", passPlace: "كلمة المرور", news: "أوافق على تلقي النشرات الإخبارية وتحديثات المنتجات والعروض الحصرية من serviocmm.", legalJoin: "من خلال الانضمام إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.", legalLogin: "من خلال تسجيل الدخول إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.", joinBtn: "انضم الآن", loginBtn: "تسجيل الدخول", google: "المتابعة باستخدام Google", haveAccount: "لديك حساب؟", noAccount: "ليس لديك حساب؟", forgot: "هل نسيت كلمة المرور؟" },
+                en: { joinTitle: "Join serviocmm", loginTitle: "Log in", namePlace: "Name", emailPlace: "Email", passPlace: "Password", news: "I agree to receive newsletters, product updates, and exclusive offers from serviocmm.", legalJoin: "By joining serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.", legalLogin: "By logging into serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.", joinBtn: "Join", loginBtn: "Log in", google: "Continue with Google", haveAccount: "Have an account?", noAccount: "Don't have an account?", forgot: "Forgot password?" }
             };
-
             const cur = t[lang];
 
             if (type === 'join') {
                 container.innerHTML = `
                     <div class="auth-title">${cur.joinTitle}</div>
-                    <div class="auth-input-group"><input type="text" class="auth-input" placeholder="${cur.namePlace}"></div>
-                    <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${cur.emailPlace}"></div>
+                    <div class="auth-input-group"><input type="text" id="auth-name-in" class="auth-input" placeholder="${cur.namePlace}"></div>
+                    <div class="auth-input-group"><input type="email" id="auth-email-in" class="auth-input" placeholder="${cur.emailPlace}"></div>
                     <div class="auth-input-group">
-                        <input type="password" class="auth-input" placeholder="${cur.passPlace}">
+                        <input type="password" id="auth-pass-in" class="auth-input" placeholder="${cur.passPlace}">
                         <div class="toggle-password" onclick="togglePassword(this)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
                     <div class="custom-checkbox-wrapper" onclick="toggleCheckbox(this.querySelector('.custom-checkbox'))">
@@ -717,28 +762,28 @@
                         <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">${cur.news}</div>
                     </div>
                     <p class="auth-legal-small">${cur.legalJoin}</p>
-                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this)">
+                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this, 'join')">
                         <span>${cur.joinBtn}</span>
                         <div class="exact-8-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                     </button>
-                    <div class="social-btn">${googleIconSvg} ${cur.google}</div>
+                    <div class="social-btn" onclick="window.firebaseGoogle()">${googleIconSvg} ${cur.google}</div>
                     <div class="auth-footer">${cur.haveAccount} <span onclick="openAuthModal('login')">${cur.loginBtn}</span></div>
                 `;
             } else {
                 container.innerHTML = `
                     <div class="auth-title">${cur.loginTitle}</div>
-                    <div class="auth-input-group"><input type="email" class="auth-input" placeholder="${cur.emailPlace}"></div>
+                    <div class="auth-input-group"><input type="email" id="auth-email-in" class="auth-input" placeholder="${cur.emailPlace}"></div>
                     <div class="auth-input-group">
-                        <input type="password" class="auth-input" placeholder="${cur.passPlace}">
+                        <input type="password" id="auth-pass-in" class="auth-input" placeholder="${cur.passPlace}">
                         <div class="toggle-password" onclick="togglePassword(this)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
                     </div>
                     <div style="text-align:inherit; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">${cur.forgot}</div>
                     <p class="auth-legal-small">${cur.legalLogin}</p>
-                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this)">
+                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this, 'login')">
                         <span>${cur.loginBtn}</span>
                         <div class="exact-8-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                     </button>
-                    <div class="social-btn">${googleIconSvg} ${cur.google}</div>
+                    <div class="social-btn" onclick="window.firebaseGoogle()">${googleIconSvg} ${cur.google}</div>
                     <div class="auth-footer">${cur.noAccount} <span onclick="openAuthModal('join')">${cur.joinBtn}</span></div>
                 `;
             }
@@ -755,90 +800,49 @@
             document.querySelectorAll('iframe[id^="vimeo-new-"]').forEach((iframe, idx) => {
                 const player = new Vimeo.Player(iframe);
                 playersNew[idx] = player;
-
-                player.on('loaded', () => {
-                    document.getElementById('media-loader').style.display = 'none';
-                });
-
-                player.on('ended', () => {
-                    switchVideoNew((idx + 1) % totalSlidesNew);
-                });
-
-                player.on('error', () => {
-                    document.getElementById('media-loader').style.display = 'flex';
-                    setTimeout(() => switchVideoNew((idx + 1) % totalSlidesNew), 500);
-                });
+                player.on('loaded', () => { document.getElementById('media-loader').style.display = 'none'; });
+                player.on('ended', () => { switchVideoNew((idx + 1) % totalSlidesNew); });
+                player.on('error', () => { document.getElementById('media-loader').style.display = 'flex'; setTimeout(() => switchVideoNew((idx + 1) % totalSlidesNew), 500); });
             });
-
             document.querySelectorAll('.video-slide-new img').forEach((img, idx) => {
-                img.onerror = () => {
-                    document.getElementById('media-loader').style.display = 'flex';
-                    switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
-                };
+                img.onerror = () => { document.getElementById('media-loader').style.display = 'flex'; switchVideoNew((currentIndexNew + 1) % totalSlidesNew); };
             });
-
             switchVideoNew(0);
             startAutoCycle();
         }
 
         function startAutoCycle() {
             clearInterval(sliderTimer);
-            sliderTimer = setInterval(() => {
-                switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
-            }, 7000); 
+            sliderTimer = setInterval(() => { switchVideoNew((currentIndexNew + 1) % totalSlidesNew); }, 7000); 
         }
 
         function switchVideoNew(index) {
             if (isTransitioning) return;
             isTransitioning = true;
-            
             const loader = document.getElementById('media-loader');
             currentIndexNew = index;
             const slides = document.querySelectorAll('.video-slide-new');
             const dots = document.querySelectorAll('.dot-new');
-            
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
-            
             if(slides[index]) slides[index].classList.add('active');
             if(dots[index]) dots[index].classList.add('active');
-
-            let emergencyTimeout = setTimeout(() => {
-                loader.style.display = 'flex'; 
-                isTransitioning = false;
-                switchVideoNew((index + 1) % totalSlidesNew);
-            }, 3000);
-
+            let emergencyTimeout = setTimeout(() => { loader.style.display = 'flex'; isTransitioning = false; switchVideoNew((index + 1) % totalSlidesNew); }, 3000);
             if (index < 2) {
                 playersNew.forEach((p, i) => {
-                    if (i === index && p) { 
-                        p.play().then(() => {
-                            clearTimeout(emergencyTimeout);
-                            loader.style.display = 'none';
-                            isTransitioning = false;
-                        }).catch(() => {}); 
-                    } 
+                    if (i === index && p) { p.play().then(() => { clearTimeout(emergencyTimeout); loader.style.display = 'none'; isTransitioning = false; }).catch(() => {}); } 
                     else if(p) { p.pause().catch(() => {}); p.setCurrentTime(0).catch(() => {}); }
                 });
             } else {
                 playersNew.forEach(p => { if(p) { p.pause().catch(() => {}); p.setCurrentTime(0).catch(() => {}); } });
-                clearTimeout(emergencyTimeout);
-                loader.style.display = 'none';
-                isTransitioning = false;
+                clearTimeout(emergencyTimeout); loader.style.display = 'none'; isTransitioning = false;
             }
         }
 
-        let touchstartXN = 0;
-        let touchendXN = 0;
+        let touchstartXN = 0; let touchendXN = 0;
         const gestureZoneN = document.querySelector('.video-overlay-new');
-        gestureZoneN.addEventListener('touchstart', e => { 
-            touchstartXN = e.changedTouches[0].screenX; 
-        }, {passive: true});
-        gestureZoneN.addEventListener('touchend', e => { 
-            touchendXN = e.changedTouches[0].screenX; 
-            handleGestureN(); 
-            startAutoCycle(); 
-        }, {passive: true});
+        gestureZoneN.addEventListener('touchstart', e => { touchstartXN = e.changedTouches[0].screenX; }, {passive: true});
+        gestureZoneN.addEventListener('touchend', e => { touchendXN = e.changedTouches[0].screenX; handleGestureN(); startAutoCycle(); }, {passive: true});
         
         function handleGestureN() {
             if (touchendXN < touchstartXN - 50) switchVideoNew((currentIndexNew + 1) % totalSlidesNew);
@@ -846,7 +850,6 @@
         }
 
         const mdiGlobe = `<svg class="nav-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M11,19.93c-3.95-0.49-7-3.85-7-7.93 c0-0.62,0.08-1.21,0.21-1.79L9,15v1c0,1.1,0.9,2,2,2V19.93z M17.9,17.39c-0.26-0.81-1-1.39-1.9-1.39h-1v-3c0-0.55-0.45-1-1-1H8v-2h2 c0.55,0,1-0.45,1-1V7h2c1.1,0,2-0.9,2-2v-0.41c2.93,1.19,5,4.06,5,7.41C20,14.08,19.2,15.97,17.9,17.39z"/></svg>`;
-
         const regionConfigs = [
             { id: 'algeria', ar: "الجزائر", en: "Algeria", flag: 'https://flagcdn.com/dz.svg' },
             { id: 'egypt', ar: "مصر", en: "Egypt", flag: 'https://flagcdn.com/eg.svg' },
@@ -862,13 +865,7 @@
             { id: 'uae', ar: "الإمارات", en: "UAE", flag: 'https://flagcdn.com/ae.svg' }
         ];
 
-        function openSelection() {
-            tempLang = localStorage.getItem('pref_lang') || 'ar';
-            tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
-            renderSheet();
-            document.getElementById('overlay').style.display = 'flex';
-        }
-
+        function openSelection() { tempLang = localStorage.getItem('pref_lang') || 'ar'; tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0; renderSheet(); document.getElementById('overlay').style.display = 'flex'; }
         function closeSelection() { document.getElementById('overlay').style.display = 'none'; }
         function setTempLang(l) { tempLang = l; renderSheet(); }
         function setTempReg(i) { tempRegIdx = i; renderSheet(); }
@@ -878,7 +875,6 @@
             container.innerHTML = '';
             document.getElementById('lang-en').className = tempLang === 'en' ? 'option-box selected' : 'option-box';
             document.getElementById('lang-ar').className = tempLang === 'ar' ? 'option-box selected' : 'option-box';
-
             regionConfigs.forEach((reg, i) => {
                 const box = document.createElement('div');
                 box.className = i === tempRegIdx ? 'option-box selected' : 'option-box';
@@ -887,11 +883,7 @@
                 box.innerHTML = `<span>${reg[tempLang]}</span>` + icon;
                 container.appendChild(box);
             });
-
-            const labels = {
-                ar: { title: "لغة/منطقة", lang: "لغة", reg: "منطقة", save: "حفظ" },
-                en: { title: "Language/Region", lang: "Language", reg: "Region", save: "Save" }
-            };
+            const labels = { ar: { title: "لغة/منطقة", lang: "لغة", reg: "منطقة", save: "حفظ" }, en: { title: "Language/Region", lang: "Language", reg: "Region", save: "Save" } };
             document.getElementById('sheet-title-label').innerText = labels[tempLang].title;
             document.getElementById('lang-section-label').innerText = labels[tempLang].lang;
             document.getElementById('region-section-label').innerText = labels[tempLang].reg;
@@ -919,16 +911,11 @@
             document.getElementById('label-reg').innerText = reg[lang];
             document.getElementById('separator-bar').style.display = 'inline';
             document.getElementById('flag-display').innerHTML = reg.type === 'icon' ? reg.svg : `<img src="${reg.flag}" class="nav-icon" style="width:24px; height:16px; border-radius:2px; object-fit:cover;" decoding="async">`;
-
-            const translations = {
-                ar: { hero: "المنصة الأكبر للمتابعين والخدمات في الشرق الأوسط", join: "انضم مجاناً", login: "تسجيل الدخول", legal: "باستخدام تطبيق serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا." },
-                en: { hero: "The Largest Platform for Followers & Services in MENA", join: "Join for free", login: "Log in", legal: "By using the serviocmm app, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>." }
-            };
+            const translations = { ar: { hero: "المنصة الأكبر للمتابعين والخدمات في الشرق الأوسط", join: "انضم مجاناً", login: "تسجيل الدخول", legal: "باستخدام تطبيق serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا." }, en: { hero: "The Largest Platform for Followers & Services in MENA", join: "Join for free", login: "Log in", legal: "By using the serviocmm app, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>." } };
             document.getElementById('hero-text-label').innerText = translations[lang].hero;
             document.querySelector('#btn-join-label span').innerText = translations[lang].join;
             document.querySelector('#btn-login-label span').innerText = translations[lang].login;
             document.getElementById('legal-label').innerHTML = translations[lang].legal;
-            
             if (document.getElementById('auth-modal').style.display === 'flex') {
                 const isJoin = document.querySelector('.auth-title').innerText.includes('Join') || document.querySelector('.auth-title').innerText.includes('انضم');
                 openAuthModal(isJoin ? 'join' : 'login');
@@ -936,7 +923,6 @@
         }
 
         function closeDialog() { document.getElementById('dialog-overlay').style.display = 'none'; }
-
         updateUI();
         initSlider();
     </script>
