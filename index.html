@@ -70,8 +70,9 @@
         .v-line { width: 1px; height: 30px; background-color: rgba(0,0,0,0.1); margin: 0 12px; }
         
         .title-box { display: flex; flex-direction: column; text-align: right !important; }
-        .title-box span:first-child { font-size: 11px; font-weight: 800; color: #1a202c; margin-bottom: 2px; letter-spacing: 0px; }
-        .title-box span:last-child { font-size: 9px; font-weight: 600; color: #64748b; letter-spacing: 0px; }
+        .title-box span { font-family: 'Cairo', 'Inter', sans-serif; letter-spacing: 0px; display: block; }
+        .title-box span:first-child { font-size: 11px; font-weight: 800; color: #1a202c; margin-bottom: 0px; }
+        .title-box span:last-child { font-size: 11px; font-weight: 800; color: #1a202c; }
 
         .info-display-wrapper { 
             display: flex; align-items: center; background: #FFFFFF; 
@@ -343,14 +344,189 @@
             background: rgba(255,255,255,0.7); z-index: 10002; justify-content: center; align-items: center;
         }
 
-        #media-loader {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            display: none;
+        .auth-modal {
+            display: none; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+            background: #fff; 
+            z-index: 10005; 
+            flex-direction: column;
+            overflow-y: auto;
         }
+        .auth-sheet {
+            width: 100%; 
+            max-width: 480px; 
+            margin: 0 auto;
+            background: white; 
+            padding: 20px; 
+            box-sizing: border-box; 
+            position: relative;
+            text-align: left; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            direction: ltr !important;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        [dir="rtl"] .auth-sheet {
+            text-align: right;
+            direction: rtl !important;
+        }
+
+        .auth-title { font-size: 34px; font-weight: 900; margin: 50px 0 40px; color: #000; text-align: center; letter-spacing: -0.5px; }
+        .auth-input-group { margin-bottom: 8px; position: relative; }
+        
+        .auth-input {
+            width: 100%; padding: 16px 0; border: none; border-bottom: 1.5px solid #e5e7eb;
+            border-radius: 0;
+            font-size: 18px; outline: none; color: #000;
+            font-weight: 400;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        .auth-input.invalid-email-border {
+            border-bottom-color: #ff0000 !important;
+        }
+        .email-error-msg {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+            font-weight: 600;
+        }
+        .auth-input::placeholder { color: #9ca3af; }
+        
+        [dir="rtl"] .auth-input {
+            text-align: right;
+        }
+        [dir="rtl"] .email-error-msg {
+            text-align: right;
+        }
+
+        .auth-submit-btn {
+            width: 100%; padding: 18px; background: var(--primary-green); border: none; border-radius: 12px;
+            color: #fff; font-size: 20px; font-weight: 800; margin: 30px 0 15px; cursor: pointer;
+            transition: opacity 0.2s, background-color 0.2s;
+            display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        
+        .auth-submit-btn:disabled {
+            background-color: var(--primary-green) !important;
+            opacity: 0.35;
+            cursor: not-allowed;
+            color: #d1d5db;
+        }
+
+        .auth-submit-btn span { flex: 1; text-align: center; }
+        .auth-submit-btn .exact-8-spinner {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%) scale(0.5);
+            margin: 0;
+        }
+
+        .social-btn {
+            width: 100%; padding: 18px; border: none; border-radius: 12px;
+            background: #f3f4f6; display: flex; align-items: center; justify-content: center;
+            gap: 12px; margin-bottom: 12px; font-weight: 700; cursor: pointer; font-size: 18px;
+            color: #000; box-sizing: border-box;
+            position: relative;
+        }
+        .social-btn .google-icon-svg { width: 24px; height: 24px; position: absolute; left: 20px; }
+        [dir="rtl"] .social-btn .google-icon-svg { left: auto; right: 20px; }
+        
+        .auth-footer { margin: 40px 0 20px; color: #6b7280; font-size: 16px; text-align: center; font-weight: 500; }
+        
+        .auth-footer span { font-weight: 800; color: #386E2C; cursor: pointer; text-decoration: underline; }
+        
+        .auth-legal-small { font-size: 13px; color: #000; line-height: 1.5; margin: 20px 0; font-weight: 500; }
+        
+        .toggle-password { position: absolute; right: 0; top: 16px; cursor: pointer; color: #374151; }
+        [dir="rtl"] .toggle-password { right: auto; left: 0; }
+        
+        .custom-checkbox-wrapper { display: flex; align-items: flex-start; gap: 12px; margin: 25px 0; cursor: pointer; }
+        .custom-checkbox { width: 22px; height: 22px; border: 2px solid #000; border-radius: 6px; flex-shrink: 0; margin-top: 2px; position: relative; transition: background 0.2s; }
+        .custom-checkbox.checked { background: #000; }
+        .custom-checkbox.checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 14px; font-weight: 800; }
+
+        .auth-error-banner {
+            color: #ff0000;
+            padding: 8px 0;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            animation: fadeInError 0.3s ease-out;
+            direction: inherit;
+        }
+        @keyframes fadeInError {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .error-icon-red {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #ff0000;
+        }
+
+        /* Saved Accounts Section Styles */
+        .saved-accounts-section {
+            margin-bottom: 25px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+        .saved-accounts-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .account-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+        .account-item:hover {
+            background: #f3f4f6;
+            border-color: #e5e7eb;
+        }
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        [dir="rtl"] .account-avatar { margin-right: 0; margin-left: 12px; }
+        .account-info { flex-grow: 1; overflow: hidden; }
+        .account-name { font-weight: 700; color: #111827; font-size: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .account-email { font-size: 13px; color: #6b7280; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     </style>
     <script src="https://player.vimeo.com/api/player.js"></script>
 </head>
@@ -391,9 +567,9 @@
                         </g>
                     </svg>
                     <div class="v-line"></div>
-                    <div class="title-box">
-                        <span style="text-align: right !important;">مركز الخدمات الرقمية</span>
-                        <span style="text-align: right !important;">Digital Services Center</span>
+                    <div class="title-box" id="header-dynamic-title">
+                        <span style="text-align: inherit !important;">مركز الخدمات</span>
+                        <span style="text-align: inherit !important;">الرقمية</span>
                     </div>
                 </div>
                 <div class="header-left-group">
@@ -493,6 +669,15 @@
         <div class="content-sections-wrapper"></div>
     </div>
 
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-sheet">
+            <div class="close-sheet" style="top: 25px; right: 25px;" onclick="closeAuthModal()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </div>
+            <div id="auth-content"></div>
+        </div>
+    </div>
+
     <div id="overlay" class="selection-overlay" onclick="closeSelection()">
         <div class="selection-sheet" onclick="event.stopPropagation()">
             <div class="sheet-header">
@@ -525,6 +710,105 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyBYNRiMneaU-d6FPMbCnjcWQBX4Tdg50zk", 
+            authDomain: "serviocmm-a65ed.firebaseapp.com", 
+            projectId: "serviocmm-a65ed", 
+            storageBucket: "serviocmm-a65ed.firebasestorage.app", 
+            messagingSenderId: "975373759034", 
+            appId: "1:975373759034:web:645cb5fb48772839453b03" 
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        async function saveUserToFirestore(user, customName = null) {
+            const lang = localStorage.getItem('pref_lang') || 'ar';
+            const regIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
+            const regions_ar = ["الجزائر", "مصر", "العراق", "الأردن", "الشرق الأوسط", "المغرب", "نيجيريا", "عمان", "فلسطين", "قطر", "السعودية", "الإمارات"];
+            const regions_en = ["Algeria", "Egypt", "Iraq", "Jordan", "MENA", "Morocco", "Nigeria", "Oman", "Palestine", "Qatar", "Saudi Arabia", "UAE"];
+            
+            const currentRegionName = lang === 'ar' ? regions_ar[regIdx] : regions_en[regIdx];
+            const currentLanguageName = lang === 'ar' ? "العربية" : "English";
+
+            const userRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(userRef);
+
+            // Save for Quick Login
+            let savedAccounts = JSON.parse(localStorage.getItem('saved_accounts') || '[]');
+            const accountExists = savedAccounts.some(acc => acc.uid === user.uid);
+            if (!accountExists) {
+                savedAccounts.push({
+                    uid: user.uid,
+                    name: customName || user.displayName || "User",
+                    email: user.email,
+                    photo: user.photoURL
+                });
+                localStorage.setItem('saved_accounts', JSON.stringify(savedAccounts));
+            }
+
+            if (!docSnap.exists()) {
+                await setDoc(userRef, {
+                    name: customName || user.displayName || "User",
+                    balance: 0,
+                    total_spend: 0,
+                    email: user.email,
+                    uid: user.uid,
+                    selected_region: currentRegionName,
+                    selected_language: currentLanguageName
+                });
+            } else {
+                await setDoc(userRef, {
+                    selected_region: currentRegionName,
+                    selected_language: currentLanguageName
+                }, { merge: true });
+            }
+            window.location.href = "dashboard/";
+        }
+
+        window.firebaseLogin = async (email, password) => {
+            try {
+                const res = await signInWithEmailAndPassword(auth, email, password);
+                await saveUserToFirestore(res.user);
+            } catch (e) {
+                window.showAuthError(e.message);
+            }
+        };
+
+        window.firebaseJoin = async (name, email, password) => {
+            try {
+                const res = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(res.user, { displayName: name });
+                await saveUserToFirestore(res.user, name);
+            } catch (e) {
+                window.showAuthError(e.message);
+            }
+        };
+
+        window.firebaseGoogle = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                await saveUserToFirestore(result.user);
+            } catch (e) {
+                window.showAuthError(e.message);
+            }
+        };
+
+        window.quickLogin = async (uid) => {
+             document.getElementById('global-spinner-overlay').style.display = 'flex';
+             setTimeout(() => {
+                 window.location.href = "dashboard/";
+             }, 1000);
+        };
+    </script>
+
     <script>
         let currentIndexNew = 0;
         const totalSlidesNew = 4;
@@ -535,17 +819,207 @@
         let tempLang = localStorage.getItem('pref_lang') || 'ar';
         let tempRegIdx = parseInt(localStorage.getItem('pref_reg_idx')) || 0;
 
+        window.addEventListener('pageshow', function(event) {
+            const globalSpinner = document.getElementById('global-spinner-overlay');
+            if (globalSpinner) {
+                globalSpinner.style.display = 'none';
+            }
+            document.body.style.overflow = ''; 
+        });
+
+        const googleIconSvg = `<svg class="google-icon-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>`;
+
         function handleMainBtnClick(btn, type) {
             const spinner = btn.querySelector('.exact-8-spinner');
             spinner.style.display = 'block';
             setTimeout(() => {
                 spinner.style.display = 'none';
-                if(type === 'join') {
-                    window.location.href = './Create-Account/';
-                } else {
-                    window.location.href = './Sign-In/';
-                }
+                openAuthModal(type);
             }, 800);
+        }
+
+        function handleAuthSubmit(btn, type) {
+            const emailInput = document.getElementById('auth-email-in');
+            if (emailInput && !validateEmail(emailInput.value)) {
+                return;
+            }
+            const spinner = btn.querySelector('.exact-8-spinner');
+            spinner.style.display = 'block';
+            const email = emailInput?.value;
+            const pass = document.getElementById('auth-pass-in')?.value;
+            if(type === 'login') {
+                window.firebaseLogin(email, pass).finally(() => spinner.style.display = 'none');
+            } else {
+                const name = document.getElementById('auth-name-in')?.value;
+                window.firebaseJoin(name, email, pass).finally(() => spinner.style.display = 'none');
+            }
+        }
+
+        window.showAuthError = function(firebaseError) {
+            const banner = document.getElementById('auth-error-banner');
+            const errorText = document.getElementById('error-message-text');
+            if (banner && errorText) {
+                const lang = localStorage.getItem('pref_lang') || 'ar';
+                let msg = (lang === 'ar') ? "حدث خطأ أثناء تسجيل الدخول. يرجى التحقق من بياناتك." : "Login error. Please check your credentials.";
+                
+                if (firebaseError.includes('auth/invalid-credential') || firebaseError.includes('auth/wrong-password') || firebaseError.includes('auth/user-not-found')) {
+                    msg = (lang === 'ar') ? "البريد الإلكتروني أو كلمة المرور غير صحيحة." : "Invalid email or password.";
+                } else if (firebaseError.includes('auth/email-already-in-use')) {
+                    msg = (lang === 'ar') ? "هذا البريد الإلكتروني مستخدم بالفعل." : "This email is already in use.";
+                }
+
+                errorText.innerText = msg;
+                banner.style.display = 'flex';
+                banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@gmail\.com$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function checkFormValidity() {
+            const emailInput = document.getElementById('auth-email-in');
+            const passInput = document.getElementById('auth-pass-in');
+            const nameInput = document.getElementById('auth-name-in');
+            const submitBtn = document.querySelector('.auth-submit-btn');
+            
+            const isEmailValid = emailInput && validateEmail(emailInput.value);
+            const isPassValid = passInput && passInput.value.length >= 1;
+            const isNameValid = nameInput ? nameInput.value.length >= 1 : true;
+
+            if (submitBtn) {
+                submitBtn.disabled = !(isEmailValid && isPassValid && isNameValid);
+            }
+        }
+
+        function handleEmailInput(input) {
+            checkFormValidity();
+        }
+
+        function handleEmailBlur(input) {
+            const errorMsg = document.getElementById('email-error-msg');
+            if (input.value !== "" && !validateEmail(input.value)) {
+                input.classList.add('invalid-email-border');
+                if (errorMsg) errorMsg.style.display = 'block';
+            } else {
+                input.classList.remove('invalid-email-border');
+                if (errorMsg) errorMsg.style.display = 'none';
+            }
+        }
+
+        function togglePassword(icon) {
+            const input = icon.parentElement.querySelector('input');
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            if (isPassword) {
+                icon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11-8 11-8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+            } else {
+                icon.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>`;
+            }
+        }
+
+        function toggleCheckbox(el) { el.classList.toggle('checked'); }
+
+        function openAuthModal(type) {
+            const container = document.getElementById('auth-content');
+            const lang = localStorage.getItem('pref_lang') || 'ar';
+            const t = {
+                ar: { joinTitle: "انضم إلى serviocmm", loginTitle: "تسجيل الدخول", namePlace: "الاسم", emailPlace: "البريد الإلكتروني", passPlace: "كلمة المرور", news: "أوافق على تلقي النشرات الإخبارية وتحديثات المنتجات والعروض الحصرية من serviocmm.", legalJoin: "من خلال الانضمام إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.", legalLogin: "من خلال تسجيل الدخول إلى serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا.", joinBtn: "انضم الآن", loginBtn: "تسجيل الدخول", google: "المتابعة باستخدام Google", haveAccount: "لديك حساب؟", noAccount: "ليس لديك حساب؟", forgot: "هل نسيت كلمة المرور؟", emailError: "الرجاء إدخال بريد Gmail صالح", savedTitle: "الحسابات المحفوظة" },
+                en: { joinTitle: "Join serviocmm", loginTitle: "Log in", namePlace: "Name", emailPlace: "Email", passPlace: "Password", news: "I agree to receive newsletters, product updates, and exclusive offers from serviocmm.", legalJoin: "By joining serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.", legalLogin: "By logging into serviocmm, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>.", joinBtn: "Join", loginBtn: "Log in", google: "Continue with Google", haveAccount: "Have an account?", noAccount: "Don't have an account?", forgot: "Forgot password?", emailError: "Please enter a valid Gmail email", savedTitle: "Saved Accounts" }
+            };
+            const cur = t[lang];
+
+            if (type === 'join') {
+                container.innerHTML = `
+                    <div class="auth-title">${cur.joinTitle}</div>
+                    <div class="auth-input-group"><input type="text" id="auth-name-in" class="auth-input" placeholder="${cur.namePlace}" oninput="checkFormValidity()"></div>
+                    <div class="auth-input-group">
+                        <input type="email" id="auth-email-in" class="auth-input" placeholder="${cur.emailPlace}" oninput="handleEmailInput(this)" onblur="handleEmailBlur(this)">
+                        <div id="email-error-msg" class="email-error-msg">${cur.emailError}</div>
+                    </div>
+                    <div class="auth-input-group">
+                        <input type="password" id="auth-pass-in" class="auth-input" placeholder="${cur.passPlace}" oninput="checkFormValidity()">
+                        <div class="toggle-password" onclick="togglePassword(this)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
+                    </div>
+                    <div class="custom-checkbox-wrapper" onclick="toggleCheckbox(this.querySelector('.custom-checkbox'))">
+                        <div class="custom-checkbox"></div>
+                        <div style="font-size:14px; color:#000; line-height:1.4; font-weight:500;">${cur.news}</div>
+                    </div>
+                    <p class="auth-legal-small">${cur.legalJoin}</p>
+                    <div id="auth-error-banner" class="auth-error-banner">
+                        <div class="error-icon-red">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <span id="error-message-text"></span>
+                    </div>
+                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this, 'join')" disabled>
+                        <span>${cur.joinBtn}</span>
+                        <div class="exact-8-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </button>
+                    <div class="social-btn" onclick="window.firebaseGoogle()">${googleIconSvg} ${cur.google}</div>
+                    <div class="auth-footer">${cur.haveAccount} <span onclick="openAuthModal('login')">${cur.loginBtn}</span></div>
+                `;
+            } else {
+                let savedAccountsHtml = '';
+                const savedAccounts = JSON.parse(localStorage.getItem('saved_accounts') || '[]');
+                if (savedAccounts.length > 0) {
+                    savedAccountsHtml = `<div class="saved-accounts-section">
+                        <div class="saved-accounts-title">${cur.savedTitle}</div>`;
+                    savedAccounts.forEach(acc => {
+                        const initial = acc.name.charAt(0).toUpperCase();
+                        savedAccountsHtml += `
+                            <div class="account-item" onclick="window.quickLogin('${acc.uid}')">
+                                <div class="account-avatar">${initial}</div>
+                                <div class="account-info">
+                                    <span class="account-name">${acc.name}</span>
+                                    <span class="account-email">${acc.email}</span>
+                                </div>
+                            </div>`;
+                    });
+                    savedAccountsHtml += `</div>`;
+                }
+
+                container.innerHTML = `
+                    <div class="auth-title">${cur.loginTitle}</div>
+                    ${savedAccountsHtml}
+                    <div class="auth-input-group">
+                        <input type="email" id="auth-email-in" class="auth-input" placeholder="${cur.emailPlace}" oninput="handleEmailInput(this)" onblur="handleEmailBlur(this)">
+                        <div id="email-error-msg" class="email-error-msg">${cur.emailError}</div>
+                    </div>
+                    <div class="auth-input-group">
+                        <input type="password" id="auth-pass-in" class="auth-input" placeholder="${cur.passPlace}" oninput="checkFormValidity()">
+                        <div class="toggle-password" onclick="togglePassword(this)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg></div>
+                    </div>
+                    <div style="text-align:inherit; font-size:15px; color:#9ca3af; margin: 15px 0 25px; font-weight:500;">${cur.forgot}</div>
+                    <p class="auth-legal-small">${cur.legalLogin}</p>
+                    <div id="auth-error-banner" class="auth-error-banner">
+                        <div class="error-icon-red">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        </div>
+                        <span id="error-message-text"></span>
+                    </div>
+                    <button class="auth-submit-btn" onclick="handleAuthSubmit(this, 'login')" disabled>
+                        <span>${cur.loginBtn}</span>
+                        <div class="exact-8-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </button>
+                    <div class="social-btn" onclick="window.firebaseGoogle()">${googleIconSvg} ${cur.google}</div>
+                    <div class="auth-footer">${cur.noAccount} <span onclick="openAuthModal('join')">${cur.joinBtn}</span></div>
+                `;
+            }
+            document.getElementById('auth-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+            document.body.style.overflow = ''; 
         }
 
         function initSlider() {
@@ -650,7 +1124,7 @@
                 localStorage.setItem('pref_reg_idx', tempRegIdx);
                 updateUI();
                 document.getElementById('global-spinner-overlay').style.display = 'none';
-            }, 1500);
+            }, 2000);
         }
 
         function updateUI() {
@@ -663,11 +1137,23 @@
             document.getElementById('label-reg').innerText = reg[lang];
             document.getElementById('separator-bar').style.display = 'inline';
             document.getElementById('flag-display').innerHTML = reg.type === 'icon' ? reg.svg : `<img src="${reg.flag}" class="nav-icon" style="width:24px; height:16px; border-radius:2px; object-fit:cover;" decoding="async">`;
+            
+            const headerBox = document.getElementById('header-dynamic-title');
+            if(lang === 'ar') {
+                headerBox.innerHTML = `<span>مركز الخدمات</span><span>الرقمية</span>`;
+            } else {
+                headerBox.innerHTML = `<span>Digital Services</span><span>Center</span>`;
+            }
+
             const translations = { ar: { hero: "المنصة الأكبر للمتابعين والخدمات في الشرق الأوسط", join: "انضم مجاناً", login: "تسجيل الدخول", legal: "باستخدام تطبيق serviocmm، فإنك توافق على <span>شروط الخدمة</span> وتقر بـ <span>سياسة الخصوصية</span> الخاصة بنا." }, en: { hero: "The Largest Platform for Followers & Services in MENA", join: "Join for free", login: "Log in", legal: "By using the serviocmm app, you agree to our <span>Terms of Service</span> and acknowledge our <span>Privacy Policy</span>." } };
             document.getElementById('hero-text-label').innerText = translations[lang].hero;
             document.querySelector('#btn-join-label span').innerText = translations[lang].join;
             document.querySelector('#btn-login-label span').innerText = translations[lang].login;
             document.getElementById('legal-label').innerHTML = translations[lang].legal;
+            if (document.getElementById('auth-modal').style.display === 'flex') {
+                const isJoin = document.querySelector('.auth-title').innerText.includes('Join') || document.querySelector('.auth-title').innerText.includes('انضم');
+                openAuthModal(isJoin ? 'join' : 'login');
+            }
         }
 
         function closeDialog() { document.getElementById('dialog-overlay').style.display = 'none'; }
